@@ -1,0 +1,163 @@
+/* ---- Body Text Style Settings ---- */
+body {
+    font-family: "Lato", sans-serif;
+    color: #2d3c49;
+    font-weight: 300;
+}
+
+/* ---- Featurett Header Text Color Settings ---- */
+.text-feature {
+    color: #bcbbbb;
+}
+
+/* ---- Main Profile or Logo Picture Style Settings ---- */
+.profile {
+  display: inline-block;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
+
+/* ---- Profile desc (name) Size Style Settings ---- */
+.profile-name {
+    font-size: 60px;
+    font-weight: 100;
+}
+
+.profile-title {
+}
+
+/* ---- Profile or Logo Picture Margin Settings ---- */
+.profile-photo {
+    margin-top: 25px;
+}
+
+/* ---- Image Response Style Settings ---- */
+.img-resp {
+    display: block;
+    width: 100%;
+    height: auto;
+    align-items: center;
+    cursor: pointer; cursor: hand;
+}
+
+/* ---- Profile desc (name) Style Settings ---- */
+.profile-desc {
+    text-align: right;
+    text-transform: uppercase;
+}
+
+/* ---- iFrame Style Settings ---- */
+.iframe-modal {
+    width: 100%;
+    text-align: center;
+}
+
+/* ---- Horizontal <hr> Style Settings ---- */
+.hr-line {
+    background-color: #7d97ad !important;
+    height: 8px !important;
+    position: relative;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+/* ---- Footer ---- */
+.footer {
+    margin: 10px;
+    text-align: center;
+    font-style: italic;
+}
+
+/* ---- Media Queries Start ---- */
+/* Mobile */
+@media screen and (max-width: 400px) {
+    .profile { 
+      /* Change Border to Round Square */    
+      border-radius: 10px;
+    }
+    
+    .profile-photo {
+        display: block;
+        margin-top: 10px;
+        margin: auto;
+    }
+    
+    .profile-name {
+        text-align: center;
+    }
+    
+    .profile-title {
+        text-align: center;
+    }
+}
+
+/* Mobile and tablet */
+@media screen and (max-width: 700px) {
+    .profile {
+      /* Change Border to Round Square */ 
+      border-radius: 10px;
+    }
+    
+    .profile-photo {
+        display: block;
+        margin-top: 13px;
+        margin: auto;
+    }
+    
+    .profile-name {
+        text-align: center;
+    }
+    
+    .profile-title {
+        text-align: center;
+    }
+}
+
+/* Tablet only */
+@media screen and (min-width: 401px) and (max-width: 790px) {
+    .profile {
+      /* Change Border to Round Square */ 
+      border-radius: 10px;
+    }
+    
+    .profile-photo {
+        display: block;
+        margin-top: 15px;
+        margin: auto;
+    }
+    
+    .profile-name {
+        text-align: center;
+    }
+    
+    .profile-title {
+        text-align: center;
+    }
+}
+
+/* Tablet and desktop */
+@media screen and (min-width: 791px) and (max-width: 991px) {
+    .profile {
+      /* Change Border to Round Square */ 
+      border-radius: 10px;
+    }
+    
+    .profile-photo {
+        display: block;
+        margin-top: 15px;
+        margin: auto;
+    }
+    
+    .profile-name {
+        text-align: center;
+    }
+    
+    .profile-title {
+        text-align: center;
+    }
+}
+/* ---- Media Queries End ---- */
