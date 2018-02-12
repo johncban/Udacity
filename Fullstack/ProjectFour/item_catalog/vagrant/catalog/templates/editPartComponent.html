@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="icon"
+      type="image/png"
+      href="static/img/icon/glyphicons-260-barcode.png">
+    <link rel=stylesheet type=text/css href="{{url_for('static', filename='css/main.css')}}">
+    <link rel=stylesheet type=text/css href="{{url_for('static', filename='bootstrap337/css/bootstrap.css')}}">
+    <title>
+      Edit Part Component
+    </title>
+    <!-- the below three lines are a fix to get HTML5 semantic elements working in old versions of Internet Explorer-->
+    <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <header>
+        <nav>
+            {% include "header.html" %}
+        </nav>
+    </header>
+    <div class="container">
+        <div class="panel panel-default panel-width">
+            <div class="panel-heading">
+                <h2>
+                    Edit Part Component
+                </h2>
+            </div>
+            <div class="panel-body">
+            <form class="form-horizontal" action="#" method='post' id="frmNewPartItem">
+                {{ form.csrf_token }}
+                <section class="form-group">
+                    {{form.prt_name.label(class="control-label col-sm-2", for="p_name")}}
+                    <section class="col-sm-10">
+                        {{form.prt_name(class="form-control", size="30")}}
+                        {% for error in form.prt_name.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                        <section>
+                            {{item.p_name}}
+                        </section>
+                    </section>
+                </section>
+                <section class="form-group">
+                    {{form.description.label(class="control-label col-sm-2", for="description")}}
+                    <section class="col-sm-10">
+                        {{form.description(class="form-control", size="30")}} {% for error in form.description.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                        <section>
+                            {{item.description}}
+                        </section>
+                    </section>
+                </section>
+                <section class="form-group">
+                    {{form.cost.label(class="control-label col-sm-2", for="cost")}}
+                    <section class="col-sm-10">
+                        {{form.cost(class="form-control", size="30")}} {% for error in form.cost.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                        <section>
+                            {{item.cost}}
+                        </section>
+                    </section>
+                </section>
+                <section class="form-group">
+                    {{form.qty.label(class="control-label col-sm-2", for="qty")}}
+                    <section class="col-sm-10">
+                        {{form.qty(class="form-control", size="30")}} {% for error in form.qty.errors %}
+                        <span style="color: red;">[{{ error }}]</span>
+                        {% endfor %}
+                        <section>
+                            {{item.qty}}
+                        </section>
+                    </section>
+                </section>
+                <section class="form-group">
+                    <section class="col-sm-offset-2 col-sm-10">
+                        <input class="btn btn-default" type='submit' value='Edit'>
+                        <input class="btn btn-info" type="button" value="Cancel" onclick="location.href = '{{url_for('showComponents')}}';">
+                    </section>
+                </section>
+            </form>
+        </div>
+        </div>
+    </div>
+</body>
+</html>

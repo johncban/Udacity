@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="icon"
+      type="image/png"
+      href="static/img/icon/glyphicons-260-barcode.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel=stylesheet type=text/css href="{{url_for('static', filename='bootstrap337/css/bootstrap.css')}}">
+    <link rel=stylesheet type=text/css href="{{url_for('static', filename='css/main.css')}}">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+  crossorigin="anonymous">
+    </script>
+    <title>
+        Edit Component
+    </title>
+    <!-- the below three lines are a fix to get HTML5 semantic elements working in old versions of Internet Explorer-->
+    <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+    <![endif]-->
+</head>
+<body>
+  <header>
+    <nav>
+        {% include "header.html" %}
+    </nav>
+  </header>
+        <div class="container">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h1>
+                     Edit Component
+                    </h1>
+                  </div>
+                  <form action="{{ url_for('editComponent', pccomponents_id = pccomponents.id) }}" method='post'>
+                  <div class="panel-body">
+                      <div class="form-group">
+                      <label class="col-form-label">Name:</label>
+                       {{ form.csrf_token }}
+                       {{ form.ec_name(size=30) }}
+                       {% for error in form.ec_name.errors %}
+                       <span style="color: red;">[{{ error }}]<link rel=stylesheet type=text/css href="{{url_for('static', filename='css/main.css')}}"></span>
+                       {% endfor %}
+                      </div>
+                      <div class="btn-group form-group" role="group" aria-label="Basic example">
+                        <input class="btn btn-default" type='submit' value='Edit'>
+                        <input class="btn btn-default" type="button" value="Cancel" onclick="location.href = '{{url_for('showComponents')}}';">
+                      </div>
+                  </div>
+                  </form>
+                </div>
+          </div>
+</body>
+</html>

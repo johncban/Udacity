@@ -1,0 +1,266 @@
+
+body, html{
+    height: 100%;
+    cursor: default!important;
+}
+
+.bottom-space {
+  padding-bottom: 0px !important;
+  margin-bottom: 0px !important;
+}
+
+footer.well{
+  margin-bottom: -20px !important;
+}
+
+/* Bootstrap337 padding adjustment */
+.no-gutter > [class*='col-'] {
+    padding-right:0;
+    padding-left:0;
+}
+
+
+/* Bootstrap337 button border adjustment */
+.sharp {
+    -webkit-border-radius: 0px !important;
+    -moz-border-radius: 0px !important;
+    border-radius: 0px !important;
+}
+
+/* Align Bootstrap columns inside row */
+.col-center {
+    float: none;
+    margin: 0 auto;
+}
+
+/* Header */
+.h-one {
+    text-align: center;
+}
+.sec-h-one {
+  padding-top:14% !important;
+  padding-bottom: 2% !important;
+}
+
+/* Container */
+.container .panel {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    background: #fff;
+    border-radius: 2px;
+    display: inline-block;
+    height: auto;
+    margin: 1rem;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25),
+    0 10px 10px rgba(0, 0, 0, 0.22);
+}
+
+/* Panel Header */
+.a-link-header {
+    text-decoration: none!important;
+    list-style-type: none!important;
+}
+
+/* Panel Modal Header */
+.mod-header {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+/* Panel Width Content */
+.panel-width {
+    width: 80%!important;
+}
+
+/* Delete Header Style*/
+.del-header {
+    color: #ff0000;
+}
+
+/* Modal Center*/
+.centered-modal.in {
+    display: flex !important;
+}
+.centered-modal .modal-dialog {
+    margin: auto;
+}
+
+/* Icon Size */
+.glyphico {
+    font-size: 55px;
+}
+
+/* On Load Fade Effects */
+/* make keyframes that tell the start state and the end state of our object */
+@-webkit-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@-moz-keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    opacity: 0;
+    /* make things invisible upon start */
+    -webkit-animation: fadeIn ease-in 1;
+    /* call our keyframe named fadeIn, use animattion ease-in and repeat it only 1 time */
+    -moz-animation: fadeIn ease-in 1;
+    animation: fadeIn ease-in 1;
+    -webkit-animation-fill-mode: forwards;
+    /* this makes sure that after animation is done we remain at the last keyframe value (opacity: 1)*/
+    -moz-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    -webkit-animation-duration: 1s;
+    -moz-animation-duration: 1s;
+    animation-duration: 1s;
+}
+
+.fade-in.zero {
+    -webkit-animation-delay: 0.5s;
+    -moz-animation-delay: 0.5s;
+    animation-delay: 0.5s;
+}
+
+.fade-in.one {
+    -webkit-animation-delay: 0.8s;
+    -moz-animation-delay: 0.8s;
+    animation-delay: 0.8s;
+}
+
+.fade-in.two {
+    -webkit-animation-delay: 1.2s;
+    -moz-animation-delay: 1.2s;
+    animation-delay: 1.2s;
+}
+
+.fade-in.three {
+    -webkit-animation-delay: 1.6s;
+    -moz-animation-delay: 1.6s;
+    animation-delay: 1.6s;
+}
+
+.fade-in.four {
+    -webkit-animation-delay: 1.8s;
+    -moz-animation-delay: 1.8s;
+    animation-delay: 1.8s;
+}
+
+
+/* On Load Slide Effects */
+  .animate-reveal {
+    opacity: 0;
+    -webkit-animation: reveal 1s cubic-bezier(0, 1, 0.5, 1) 1 normal forwards;
+       -moz-animation: reveal 1s ease-in 1 normal forwards;
+         -o-animation: reveal 1s cubic-bezier(0, 1, 0.5, 1) 1 normal forwards;
+            animation: reveal 1s cubic-bezier(0, 1, 0.5, 1) 1 normal forwards;
+  }
+
+  .animate-first {
+    -webkit-animation-delay: 0;
+       -moz-animation-delay: 0;
+         -o-animation-delay: 0;
+            animation-delay: 0;
+  }
+
+  .animate-second {
+    -webkit-animation-delay: 500ms;
+       -moz-animation-delay: 500ms;
+         -o-animation-delay: 500ms;
+            animation-delay: 500ms;
+  }
+
+  .animate-third {
+    -webkit-animation-delay: 1s;
+       -moz-animation-delay: 1s;
+         -o-animation-delay: 1s;
+            animation-delay: 1s;
+  }
+
+  @-webkit-keyframes reveal {
+    0% {
+      opacity: 0;
+      -webkit-transform: translateY(100%);
+         -moz-transform: translateY(100%);
+           -o-transform: translateY(100%);
+              transform: translateY(100%);
+    }
+    100% {
+      opacity: 1;
+      -webkit-transform: translateY(0);
+         -moz-transform: translateY(0);
+           -o-transform: translateY(0);
+              transform: translateY(0);
+    }
+  }
+
+  @-moz-keyframes reveal {
+    0% {
+      opacity: 0;
+      -webkit-transform: translateY(100%);
+         -moz-transform: translateY(100%);
+           -o-transform: translateY(100%);
+              transform: translateY(100%);
+    }
+    100% {
+      opacity: 1;
+      -webkit-transform: translateY(0);
+         -moz-transform: translateY(0);
+           -o-transform: translateY(0);
+              transform: translateY(0);
+    }
+  }
+
+  @-o-keyframes reveal {
+    0% {
+      opacity: 0;
+      -webkit-transform: translateY(100%);
+         -moz-transform: translateY(100%);
+           -o-transform: translateY(100%);
+              transform: translateY(100%);
+    }
+    100% {
+      opacity: 1;
+      -webkit-transform: translateY(0);
+         -moz-transform: translateY(0);
+           -o-transform: translateY(0);
+              transform: translateY(0);
+    }
+  }
+
+  @keyframes reveal {
+    0% {
+      opacity: 0;
+      -webkit-transform: translateY(100%);
+         -moz-transform: translateY(100%);
+           -o-transform: translateY(100%);
+              transform: translateY(100%);
+    }
+    100% {
+      opacity: 1;
+      -webkit-transform: translateY(0);
+         -moz-transform: translateY(0);
+           -o-transform: translateY(0);
+              transform: translateY(0);
+    }
+  }

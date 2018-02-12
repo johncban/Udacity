@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<head>
+<link rel="icon"
+      type="image/png"
+      href="static/img/icon/glyphicons-260-barcode.png">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel=stylesheet type=text/css href="{{url_for('static', filename='bootstrap337/css/bootstrap.css')}}">
+<link rel=stylesheet type=text/css href="{{url_for('static', filename='css/main.css')}}">
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='bootstrap337/js/bootstrap.min.js') }}"></script>
+<title>
+  PC Components Catalog
+</title>
+<!-- the below three lines are a fix to get HTML5 semantic elements working in old versions of Internet Explorer-->
+<!--[if lt IE 9]>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+<![endif]-->
+</head>
+{% block body %}
+<body>
+<header>
+  <nav>
+      {% include "header.html" %}
+  </nav>
+    <section class="row-fluid no-gutter hidden-xs">
+        <article class="col-sm-3 fade-in one">
+          <img src="static/img/cpu.png" class="img-responsive">
+        </article>
+        <article class="col-sm-3 fade-in two">
+          <img src="static/img/ram.png" class="img-responsive">
+        </article>
+        <article class="col-sm-3 fade-in three">
+          <img src="static/img/hd.png" class="img-responsive">
+        </article>
+        <article class="col-sm-3 fade-in four">
+          <img src="static/img/mb.png" class="img-responsive">
+        </article>
+      </section>
+</header>
+<section class="container-fluid jumbotron bottom-space">
+<section class="sec-h-one">
+  <h1 class="fade-in four h-one">
+      Inventory Catalog
+  </h1>
+</section>
+    <article class="col-md-4 animate-reveal animate-first">
+      <div class="panel panel-default" style="width:auto!important" >
+        <div class="panel-heading">
+          <h3>
+              <a class="a-link-header" data-toggle="collapse" href="#collapse1">Component Parts</a>
+            <span>
+              {% if 'username' in session%}
+              <a href="{{url_for('newComponent')}}" class="btn btn-info btn-sm navbar-btn">
+                  <span class="glyphicon glyphicon-floppy-disk"></span>
+              </a>
+              {% else %}
+              <a href="{{url_for('newComponent')}}" class="btn btn-info btn-sm navbar-btn" style="display:none">
+                  <span class="glyphicon glyphicon-floppy-disk"></span>
+              </a>
+              {% endif %}
+            </span>
+          </h3>
+        </div>
+        <div class="panel-collapse collapse" id="collapse1">
+          <div class="panel-body" style="width:auto!important">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                {% for pccomponents in pc_components %}
+                <tbody>
+                  <tr>
+                    <td>
+                    {% if 'username' in session %}
+                    <a href="{{url_for('showParts', pccomponents_id = pccomponents.id)}}" data-toggle="modal">
+                      {{pccomponents.c_name}}
+                    </a>
+                    {% else %}
+                    <a href="{{url_for('showParts', pccomponents_id = pccomponents.id)}}" data-toggle="modal" data-target="#record">
+                        {{pccomponents.c_name}}
+                    </a>
+                    {% endif %}
+                    </td>
+                    <td>
+                      {% if 'username' in session%}
+                      <a href="{{url_for('deleteComponent',pccomponents_id = pccomponents.id)}}" data-toggle="modal" data-target="#delete">
+                        <span class="glyphicon glyphicon-trash"></span>
+                      </a>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <a href="{{url_for('editComponent', pccomponents_id = pccomponents.id, )}}" class="glp_alignment">
+                        <span class="glyphicon glyphicon-edit"></span>
+                      </a>
+                      {% else %}
+                      <a href="{{url_for('deleteComponent',pccomponents_id = pccomponents.id)}}" data-toggle="modal" data-target="#delete" style="display:none">
+                          <span class="glyphicon glyphicon-trash" style="display:none"></span>
+                      </a>
+                      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <a href="{{url_for('editComponent', pccomponents_id = pccomponents.id)}}" class="glp_alignment" style="display:none">
+                        <span class="glyphicon glyphicon-edit"></span>
+                      </a>
+                      {% endif %}
+                    </td>
+                  </tr>
+                </tbody>
+                {% endfor %}
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+    <article class="col-md-8 animate-reveal animate-first">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h3>
+            <a class="a-link-header" data-toggle="collapse" href="#collapse2">
+              Parts
+            </a>
+          </h3>
+        </div>
+        <div class="panel-collapse collapse" id="collapse2">
+            <div class="panel-body">
+                <div class="table-responsive">
+                  <table class="table table-hover">
+                    {% for item in pc_parts %}
+                    <tbody>
+                      <tr>
+                        <td>
+                          {{item.p_name}}
+                        </td>
+                        <td>
+                          {{item.pccomponents.c_name}}
+                        </td>
+                        <td>
+                          <span class="badge badge-primary badge-pill">QTY: {{item.qty}}</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                    {% endfor %}
+                  </table>
+                </div>
+              </div>
+        </div>
+      </div>
+    </article>
+      <!-- Start Modal Delete -->
+      <div class="modal fade" id="delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-header mod-header">
+                  <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                  </button>
+                  <h1 class="modal-title sharp">
+                    Delete Component
+                  </h1>
+            </div>
+            <div class="modal-content sharp">
+              <!-- Modal Content -->
+            </div>
+          </div>
+      </div>
+      <!-- End Modal Delete -->
+      <!-- Start Modal Record -->
+      <div class="modal fade centered-modal" id="record" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+          <div class="modal-header mod-header">
+                  <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                  </button>
+            </div>
+            <div class="modal-content sharp">
+              <!-- Modal Content -->
+            </div>
+          </div>
+      </div>
+      <!-- End Modal Record -->
+</section>
+</body>
+{% endblock %}
