@@ -110,7 +110,6 @@ WTForms==2.1
 ``` 
 However, it can be install using ```pip``` by typing ```pip install requirements.txt```
 
-
 ## Running the App
 
 After making the vagrant operational and successfully installed the requirements above, in vagrant folder inside catalog folder just type ```python main.py``` and it will forward you to the components page if you're not logged in; otherwise, if you'll logged in you will see some activated menus for CRUD.
@@ -119,14 +118,11 @@ After making the vagrant operational and successfully installed the requirements
 The app have also JSON serializer capability, just click JSON Report and it will re-forward you to this page:
 ![JSON page](https://cdn.rawgit.com/johncban/Udacity/fsnd-prjfour/Fullstack/ProjectFour/Screen%20Shot%202018-02-12%20at%207.58.27%20PM.png)
 
-
 ## Features
-
 The app have WTForms that prompt the user if form is submitted with an empty form field; hence, the user is require to enter information. In addition, there is a [CSRF or cross site request forgery token protection](http://flask-wtf.readthedocs.io/en/stable/csrf.html) that secure the app and its information within the database from being attacked through malicious javascript commands. 
 
 ### Future Features
 There are some upgrades that will make the app better, such as adding image upload capability, more third party OAuth and the use of phone authenticator such as [Google authenticator phone app](https://pypi.python.org/pypi/authenticator).
-
 
 ## Acknowledgments
 * Google
