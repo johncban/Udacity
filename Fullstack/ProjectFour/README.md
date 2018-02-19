@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+
+>>>>>>> 5d018b5537547cbd50e68deb7909239826925936
 # Project Item Catalog
 
 In fulfillment of Udacity Fullstack Nanodegree (Plus) Project, this app or Item Catalog (PC Inventory Catalog) let the user log-in using google's oauth and utilize CRUD capability.
@@ -22,12 +26,20 @@ However, if the user is not able to login it will only preview or show basic inf
 ### Prerequisites
 The app requires vagrant in able to run the app, it requires you to follow these [steps](https://github.com/johncban/Udacity/blob/fsnd-prjfour/Fullstack/ProjectFour/item_catalog/README.md) to install vagrant.
 It also requires python 2 and pip for installing the library requirements within vagrant.
+<<<<<<< HEAD
 In addition it requires to set-up Google OAuth credentials through google developer site.
+=======
+In addition it requires to set-up Google OAuth credentials through google developer site. 
+>>>>>>> 5d018b5537547cbd50e68deb7909239826925936
 
 
 ### Installing
 
+<<<<<<< HEAD
 After installing vagrant it will require to install python 2 within vagrant. To install python 2 but in this vagrant folder python is already installed. For details installing python in vagrant ubuntu box please check this youtube [video](https://youtu.be/S8H7gQUdysU) from techbytes.
+=======
+After installing vagrant it will require to install python 2 within vagrant. To install python 2 but in this vagrant folder python is already installed. For details installing python in vagrant ubuntu box please check this youtube [video](https://youtu.be/S8H7gQUdysU) from techbytes. 
+>>>>>>> 5d018b5537547cbd50e68deb7909239826925936
 
 #### Generate and Obtain Google OAuth credentials
 Google OAuth is utilize by the app in order for the user to login and it requires token credentials from Google Dev.
@@ -39,7 +51,11 @@ CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())[
     'web']['client_id']
 ```
 
+<<<<<<< HEAD
 Under gconnect, check in main.py place or embed client_secrets.json file name so it will identify the CLIENT_ID while checking for the google connect account.
+=======
+Under gconnect, check in main.py place or embed client_secrets.json file name so it will identify the CLIENT_ID while checking for the google connect account. 
+>>>>>>> 5d018b5537547cbd50e68deb7909239826925936
 
 ```
 @app.route('/gconnect', methods=['POST'])
@@ -106,10 +122,16 @@ urllib3==1.22
 webencodings==0.5.1
 Werkzeug==0.14.1
 WTForms==2.1
+<<<<<<< HEAD
 ```
 However, it can be install using ```pip``` by typing ```pip install requirements.txt```
 
 
+=======
+``` 
+However, it can be install using ```pip``` by typing ```pip install requirements.txt```
+
+>>>>>>> 5d018b5537547cbd50e68deb7909239826925936
 ## Running the App
 
 After making the vagrant operational and successfully installed the requirements above, in vagrant folder inside catalog folder just type ```python main.py``` and it will forward you to the components page if you're not logged in; otherwise, if you'll logged in you will see some activated menus for CRUD.
@@ -118,14 +140,19 @@ After making the vagrant operational and successfully installed the requirements
 The app have also JSON serializer capability, just click JSON Report and it will re-forward you to this page:
 ![JSON page](https://cdn.rawgit.com/johncban/Udacity/fsnd-prjfour/Fullstack/ProjectFour/Screen%20Shot%202018-02-12%20at%207.58.27%20PM.png)
 
+<<<<<<< HEAD
 
 ## Features
 
+=======
+## Features
+>>>>>>> 5d018b5537547cbd50e68deb7909239826925936
 The app have WTForms that prompt the user if form is submitted with an empty form field; hence, the user is require to enter information. In addition, there is a [CSRF or cross site request forgery token protection](http://flask-wtf.readthedocs.io/en/stable/csrf.html) that secure the app and its information within the database from being attacked through malicious javascript commands. 
 
 ### Future Features
 There are some upgrades that will make the app better, such as adding image upload capability, more third party OAuth and the use of phone authenticator such as [Google authenticator phone app](https://pypi.python.org/pypi/authenticator).
 
+<<<<<<< HEAD
 
 ## Acknowledgments
 * Google
@@ -133,3 +160,11 @@ There are some upgrades that will make the app better, such as adding image uplo
 * Udacity
 * Mr. Evan, Udacity Mentor
 * Stack Overflow
+=======
+## Acknowledgments
+* Google
+* Github
+* Udacity 
+* Mr. Evan, Udacity Mentor
+* Stack Overflow 
+>>>>>>> 5d018b5537547cbd50e68deb7909239826925936
