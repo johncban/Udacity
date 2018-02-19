@@ -190,6 +190,23 @@
   {% endif %}
 {% endwith %}
 </h4>
+<h4>
+  {% with auth= get_flashed_messages(category_filter=["auth"]) %}
+  {% if auth %}
+    <div class="panel panel-warning copyright-wrap sharp flash-bg" id="copyright-wrap">
+      <div class="panel-body">
+          <button type="button" class="close" data-target="#copyright-wrap" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+         {%- for msg in auth %}
+          {{ msg }}
+         {% endfor -%}
+      </div>
+    </div>
+  {% endif %}
+{% endwith %}
+</h4>
   <h4>
     {% with partdelete= get_flashed_messages(category_filter=["partdelete"]) %}
     {% if partdelete %}

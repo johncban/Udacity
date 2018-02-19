@@ -69,6 +69,11 @@ footer.well{
     width: 80%!important;
 }
 
+/* Flash Opacity Background */
+.flash-bg {
+    background-color:rgba(252, 248, 226, 0.5);
+}
+
 /* Delete Header Style*/
 .del-header {
     color: #ff0000;

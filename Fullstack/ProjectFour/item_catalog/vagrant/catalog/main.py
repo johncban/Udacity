@@ -1,12 +1,13 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Main.py
+# main.py
 
 """
 Import essential Flask, SQLalchemy libraries and Database setup.
 """
 import json
+import datetime
 import random
 import string
 import google.oauth2.credentials
@@ -19,7 +20,7 @@ from flask import redirect, url_for, flash, jsonify, make_response
 from sqlalchemy import create_engine, asc
 from sqlalchemy.orm import sessionmaker
 from flask import session as login_session
-from db_setup import Base, Components, PartItem
+from db_setup import Base, Components, PartItem, User
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 
@@ -27,10 +28,12 @@ from flask_wtf import Form
 from wtforms import StringField, TextAreaField
 from wtforms.validators import DataRequired
 
+from login_auth import login_authrequired
+
 """
 Import DebugToolbarExtension for debugging.
 """
-# from flask_debugtoolbar import DebugToolbarExtension
+#from flask_debugtoolbar import DebugToolbarExtension
 
 app = Flask(__name__)
 
@@ -41,8 +44,8 @@ app.config['SECRET_KEY'] = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 Toolbar Debug variable
 to startup with app.config
 """
-# toolbar = DebugToolbarExtension(app)
-# app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+#toolbar = DebugToolbarExtension(app)
+#app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
 CLIENT_ID = json.loads(open('client_secrets.json', 'r').read())[
     'web']['client_id']
@@ -54,6 +57,7 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+usr_date = datetime.datetime.utcnow
 
 @app.after_request
 def add_header(response):
@@ -79,10 +83,34 @@ class ReuseForm(Form):
     qty = StringField('Unit Quantity ', validators=[DataRequired()])
 
 
+
 """
 App Login Page
 """
 
+"""
+Crate Local User Account - HELPER
+"""
+def createUser(login_session):
+    newUser = User(name=login_session['username'], email=login_session[
+                   'email'], picture=login_session['picture'])
+    session.add(newUser)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    return user.id
+
+
+def getUserInfo(user_id):
+    user = session.query(User).filter_by(id=user_id).one()
+    return user
+
+
+def getUserID(email):
+    try:
+        user = session.query(User).filter_by(email=email).one()
+        return user.id
+    except:
+        return None
 
 @app.route('/login')
 def showLogin():
@@ -263,17 +291,16 @@ def showComponents():
                            pc_parts=pc_parts)
 
 
+
 """
 Define 'newComponent' to CREATE a single pc component
 """
 
 
 @app.route('/components/new', methods=['GET', 'POST'])
+@login_authrequired
 def newComponent():
-    flash('Add Components Section', 'section')
-    if 'username' not in login_session:
-        return redirect('/login')
-    else:
+        flash('Add Components Section', 'section')
         form = ReuseForm(request.form)
         if request.method == 'POST':
             form.validate_on_submit()
@@ -295,28 +322,25 @@ Define 'editComponent' to UPDATE a single pc component
 
 @app.route('/components/<int:pccomponents_id>/edit', methods=['GET', 'POST'])
 def editComponent(pccomponents_id):
-    flash('Component Update Section', 'section')
-    if 'username' not in login_session:
-        return redirect('/login')
+    editedComponent = session.query(Components).filter_by(id=pccomponents_id).one_or_none()
+    admin = getUserInfo(editedComponent.user_id)
+    form = ReuseForm(request.form)
+    if 'username' not in login_session or editedComponent.user_id != login_session.get('user_id'):
+        flash ("Updating Component Row Only Authorize: %s" % admin.name, 'auth')
+        return redirect(url_for('showComponents'))
+    if request.method == 'POST':
+        flash('Component Update Section', 'section')
+        form.validate_on_submit()
+        if request.form['ec_name']:
+            editedComponent.name = request.form['ec_name']
+        session.add(editedComponent)
+        session.commit()
+        flash('Category Item Successfully Edited!')
+        return  redirect(url_for('showComponents'))
     else:
-        form = ReuseForm(request.form)
-        editedComponent = session.query(
-            Components).filter_by(id=pccomponents_id).one()
-
-        if request.method == 'POST':
-            form.validate_on_submit()
-            if request.form['ec_name']:
-                editedComponent.c_name = request.form['ec_name']
-                session.commit()
-                flash('Component Updated!', 'compupdate')
-                return redirect(url_for('showComponents'))
-            return render_template('editComponent.html',
-                                   pccomponents=editedComponent,
-                                   form=form)
-        else:
-            return render_template('editComponent.html',
-                                   pccomponents=editedComponent,
-                                   form=form)
+        return render_template('editComponent.html',
+                                pccomponents=editedComponent,
+                                form=form)
 
 
 """
@@ -327,20 +351,21 @@ specific pc component related to single or multiple pc part item(s)
 
 @app.route('/components/<int:pccomponents_id>/delete', methods=['GET', 'POST'])
 def deleteComponent(pccomponents_id):
-    if 'username' not in login_session:
-        return redirect('/login')
-    else:
-        deleteTheComponent = session.query(
-            Components).filter_by(id=pccomponents_id).one()
-        if request.method == 'POST':
-            session.delete(deleteTheComponent)
-            session.commit()
-            flash('PC Component Deleted!', 'compdelete')
-            return redirect(
-                url_for(
+    deleteTheComponent = session.query(
+            Components).filter_by(id=pccomponents_id).one_or_none()
+    admin = getUserInfo(deleteTheComponent.user_id)
+    form = ReuseForm(request.form)
+    if admin.id != login_session.get('user_id'):
+        flash ("Deleting PC Component Only Authorize: %s" % admin.name, 'auth')
+        return redirect(url_for('showComponents'))
+    if request.method == 'POST':
+        session.delete(deleteTheComponent)
+        session.commit()
+        flash('PC Component Deleted!', 'compdelete')
+        return redirect(url_for(
                     'showComponents',
                     pccomponents_id=pccomponents_id))
-        else:
+    else:
             return render_template(
                 'deleteComponent.html', pccomponents=deleteTheComponent)
 
@@ -354,7 +379,7 @@ to both each pc parts and pc components
 @app.route('/components/<int:pccomponents_id>/componentparts')
 def showParts(pccomponents_id):
     pc_components = session.query(
-        Components).filter_by(id=pccomponents_id).one()
+        Components).filter_by(id=pccomponents_id).one_or_none()
     pc_parts = session.query(PartItem).filter_by(
         pccomponents_id=pccomponents_id).all()
     flash('PC Parts Section', 'section')
@@ -370,36 +395,40 @@ item that is related from a component
 
 @app.route('/components/<int:pccomponents_id>/componentparts/new',
            methods=['GET', 'POST'])
+@login_authrequired
 def newPartItem(pccomponents_id):
-    flash('New Parts Section', 'section')
-    if 'username' not in login_session:
-        return redirect('/login')
-    else:
-        form = ReuseForm(request.form)
-        if request.method == 'POST':
-            form.validate_on_submit()
-            if request.form['prt_name']:
-                newPart = PartItem(p_name=form.prt_name.data,
+    pc_items = session.query(
+        PartItem).filter_by(id=pccomponents_id).one()
+    # admin = getUserInfo(pc_items.user_id)
+    form = ReuseForm(request.form)
+    """
+    if admin.id != login_session.get('user_id'):
+        flash ("Creating PC Component Item Only Authorize: %s" % admin.name, 'auth')
+        return redirect(url_for('showComponents'))
+    """
+    if request.method == 'POST':
+        flash('New Parts Section', 'section')
+        form.validate_on_submit()
+        if request.form['prt_name']:
+            newPart = PartItem(p_name=form.prt_name.data,
                                    description=form.description.data,
                                    cost=form.cost.data,
                                    qty=form.qty.data,
                                    pccomponents_id=pccomponents_id)
-                session.add(newPart)
-                session.commit()
-                flash('New PC Part Item Added!', 'partnew')
-                return redirect(
-                    url_for(
-                        'showParts',
-                        pccomponents_id=pccomponents_id,
-                        form=form))
-            return render_template('newPartItem.html',
+            session.add(newPart)
+            session.commit()
+            flash('New PC Part Item Added!', 'partnew')
+            return redirect(
+                url_for(
+                    'showParts',
+                    pccomponents_id=pccomponents_id,
+                    form=form))
+        return render_template('newPartItem.html',
                                    pccomponents_id=pccomponents_id,
                                    form=form)
-        else:
-            return render_template(
-                'newPartItem.html', pccomponents_id=pccomponents_id, form=form)
+    else:
         return render_template(
-            'newPartItem.html', pccomponents=pccomponents, form=form)
+            'newPartItem.html', pccomponents_id=pccomponents_id, form=form)
 
 
 """
@@ -410,30 +439,32 @@ pc part(s) item related from a component.
 
 @app.route('/components/<int:pccomponents_id>/<int:part_id>/edit',
            methods=['GET', 'POST'])
+@login_authrequired
 def editPartItem(pccomponents_id, part_id):
-    flash('Edit Parts Section', 'section')
-    if 'username' not in login_session:
-        return redirect('/login')
-    else:
-        form = ReuseForm(request.form)
-        editThePartItem = session.query(PartItem).filter_by(id=part_id).one()
-        if request.method == 'POST':
-            form.validate_on_submit()
-            if request.form['prt_name']:
-                editThePartItem.p_name = request.form['prt_name']
-                editThePartItem.description = request.form['description']
-                editThePartItem.cost = request.form['cost']
-                editThePartItem.qty = request.form['qty']
-                session.commit()
-                flash('PC Part Item Updated!', 'partedit')
-                return redirect(url_for(
+    editThePartItem = session.query(PartItem).filter_by(id=part_id).one_or_none()
+    admin = getUserInfo(editThePartItem.user_id)
+    form = ReuseForm(request.form)
+    if editThePartItem.user_id != login_session.get('user_id'):
+        flash ("Updating Component Item Only Authorize: %s" % admin.name, 'auth')
+        return redirect(url_for('showComponents'))
+    if request.method == 'POST':
+        flash('Edit Parts Section', 'section')
+        form.validate_on_submit()
+        if request.form['prt_name']:
+            editThePartItem.p_name = request.form['prt_name']
+            editThePartItem.description = request.form['description']
+            editThePartItem.cost = request.form['cost']
+            editThePartItem.qty = request.form['qty']
+            session.commit()
+            flash('PC Part Item Updated!', 'partedit')
+            return redirect(url_for(
                     'showParts', pccomponents_id=pccomponents_id, form=form))
-            return render_template('editPartComponent.html',
-                                   pccomponents_id=pccomponents_id,
-                                   part_id=part_id,
-                                   item=editThePartItem, form=form)
-        else:
-            return render_template('editPartComponent.html',
+        return render_template('editPartComponent.html',
+                                pccomponents_id=pccomponents_id,
+                                part_id=part_id,
+                                item=editThePartItem, form=form)
+    else:
+        return render_template('editPartComponent.html',
                                    pccomponents_id=pccomponents_id,
                                    part_id=part_id,
                                    item=editThePartItem, form=form)
@@ -448,20 +479,21 @@ Define 'deletePartItem' to DELETE specific pc part(s) related from a component.
     '/components/<int:pccomponents_id>/componentparts/<int:part_id>/delete',
     methods=['GET', 'POST'])
 def deletePartItem(pccomponents_id, part_id):
-    if 'username' not in login_session:
-        return redirect('/login')
-    else:
-        delete_thepart_item = session.query(
-            PartItem).filter_by(id=part_id).one()
-        if request.method == 'POST':
-            session.delete(delete_thepart_item)
-            session.commit()
-            flash('PC Part Item Deleted!', 'partdelete')
-            return redirect(
+    delete_thepart_item = session.query(
+            PartItem).filter_by(id=part_id).one_or_none()
+    admin = getUserInfo(delete_thepart_item.user_id)
+    if delete_thepart_item.user_id != login_session.get('user_id'):
+        flash ("Deleting Component Item Only Authorize: %s" % admin.name, 'auth')
+        return redirect(url_for('showComponents'))
+    if request.method == 'POST':
+        session.delete(delete_thepart_item)
+        session.commit()
+        flash('PC Part Item Deleted!', 'partdelete')
+        return redirect(
                 url_for('showParts', pccomponents_id=pccomponents_id))
-        else:
-            return render_template(
-                'deletePartComponent.html', item=delete_thepart_item)
+    else:
+        return render_template(
+            'deletePartComponent.html', item=delete_thepart_item)
 
 
 """
@@ -470,24 +502,27 @@ JSON Parsing of PC Component Records, PC Parts Records and Single PC Part
 
 
 @app.route('/components/JSON')
+@login_authrequired
 def componentJSON():
-    componentAll = session.query(Components).all()
-    return jsonify(Components=[i.serialize for i in componentAll])
+        componentAll = session.query(Components).all()
+        return jsonify(Components=[i.serialize for i in componentAll])
 
 
 @app.route('/components/<int:pccomponents_id>/part/JSON')
+@login_authrequired
 def componentItemJSON(pccomponents_id):
-    componentItem = \
-        session.query(Components).filter_by(id=pccomponents_id).one()
-    item_c = session.query(PartItem).filter_by(
-        pccomponents_id=pccomponents_id).all()
-    return jsonify(PartItem=[i.serialize for i in item_c])
+        componentItem = \
+            session.query(Components).filter_by(id=pccomponents_id).one_or_none()
+        item_c = session.query(PartItem).filter_by(
+            pccomponents_id=pccomponents_id).all()
+        return jsonify(PartItem=[i.serialize for i in item_c])
 
 
 @app.route('/components/<int:pccomponents_id>/part/<int:part_id>/JSON')
+@login_authrequired
 def componentPartItemJSON(pccomponents_id, part_id):
-    part_item = session.query(PartItem).filter_by(id=part_id).one()
-    return jsonify(PartItem=part_item.serialize)
+        part_item = session.query(PartItem).filter_by(id=part_id).one_or_none()
+        return jsonify(PartItem=part_item.serialize)
 
 
 if __name__ == '__main__':
