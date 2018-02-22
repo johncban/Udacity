@@ -55,12 +55,12 @@
               <a class="a-link-header" data-toggle="collapse" href="#collapse1">Component Parts</a>
             <span>
               {% if 'username' in session%}
-              <a href="{{url_for('newComponent')}}" class="btn btn-info btn-sm navbar-btn">
-                  <span class="glyphicon glyphicon-floppy-disk"></span>
+              <a href="{{url_for('newComponent')}}" class="btn btn-info btn-lg navbar-btn">
+                  <span class="glyphicon glyphicon-plus"></span>
               </a>
               {% else %}
-              <a href="{{url_for('newComponent')}}" class="btn btn-info btn-sm navbar-btn" style="display:none">
-                  <span class="glyphicon glyphicon-floppy-disk"></span>
+              <a href="{{url_for('newComponent')}}" class="btn btn-info btn-lg navbar-btn" style="display:none">
+                  <span class="glyphicon glyphicon-plus"></span>
               </a>
               {% endif %}
             </span>
@@ -76,11 +76,11 @@
                     <td>
                     {% if 'username' in session %}
                     <a href="{{url_for('showParts', pccomponents_id = pccomponents.id)}}" data-toggle="modal">
-                      {{pccomponents.c_name}}
+                      <p>{{pccomponents.c_name}}</p>
                     </a>
                     {% else %}
                     <a href="{{url_for('showParts', pccomponents_id = pccomponents.id)}}" data-toggle="modal" data-target="#record">
-                        {{pccomponents.c_name}}
+                      <p>{{pccomponents.c_name}}</p>
                     </a>
                     {% endif %}
                     </td>
@@ -129,13 +129,23 @@
                     <tbody>
                       <tr>
                         <td>
-                          {{item.p_name}}
+                          <p>{{item.p_name}}</p>
                         </td>
                         <td>
-                          {{item.pccomponents.c_name}}
+                          <p>{{item.pccomponents.c_name}}</p>
                         </td>
                         <td>
-                          <span class="badge badge-primary badge-pill">QTY: {{item.qty}}</span>
+                          <p>
+                            {% if 'username' in session%}
+                            <span class="badge badge-primary badge-pill">
+                              QTY: {{item.qty}}
+                            </span>
+                            {% else %}
+                            <span class="badge badge-primary badge-pill" style="display:none">
+                                QTY: {{item.qty}}
+                            </span>
+                            {% endif %}
+                          </p>
                         </td>
                       </tr>
                     </tbody>

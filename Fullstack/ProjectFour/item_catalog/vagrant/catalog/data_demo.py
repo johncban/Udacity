@@ -20,8 +20,8 @@ session = DBSession()
 
 
 # Create dummy user
-User1 = User(name="Robo Barista", email="johncban@gmail.com",
-             picture='https://pbs.twimg.com/profile_images/2671170543/18debd694829ed78203a5a36dd364160_400x400.png')
+User1 = User(name="Admin", email="johncban@gmail.com",
+             picture='https://avatars2.githubusercontent.com/u/1221375?s=400&u=c54411d77467978a2268f48ffb44664420594c4e&v=4')
 session.add(User1)
 session.commit()
 print "Demo user Successfully Added!"

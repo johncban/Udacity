@@ -38,12 +38,12 @@
                 <h4>
                     {{pc_components.c_name}}
                     {% if 'username' in session %}
-                    <a href="{{ url_for('newPartItem', pccomponents_id=pc_components.id) }}" class="btn btn-default btn-md navbar-btn" role="button">
-                            <span class="glyphicon glyphicon-floppy-disk"></span>
+                    <a href="{{ url_for('newPartItem', pccomponents_id=pc_components.id) }}" class="btn btn-default btn-lg navbar-btn" role="button">
+                            <span class="glyphicon glyphicon-plus"></span>
                     </a>
                     {% else %}
-                    <a href="{{ url_for('newPartItem', pccomponents_id=pc_components.id) }}" class="btn btn-default btn-md navbar-btn" role="button" style="display:none">
-                            <span class="glyphicon glyphicon-floppy-disk" style="display:none"></span>
+                    <a href="{{ url_for('newPartItem', pccomponents_id=pc_components.id) }}" class="btn btn-default btn-lg navbar-btn" role="button" style="display:none">
+                            <span class="glyphicon glyphicon-plus" style="display:none"></span>
                     </a>
                     {% endif %}
                 </h4>

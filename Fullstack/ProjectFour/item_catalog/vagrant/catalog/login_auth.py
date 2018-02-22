@@ -7,7 +7,7 @@ def login_authrequired(f):
     @wraps(f)
     def x(*args, **kwargs):
         if 'username' not in login_session:
-            flash ("User Require To Login Using Google Plus", 'auth')
+            flash ("User Require to Login to Google Plus", 'auth')
             return redirect('/login')
         return f(*args, **kwargs)
     return x

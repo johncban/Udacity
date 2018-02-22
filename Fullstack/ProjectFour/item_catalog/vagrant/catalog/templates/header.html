@@ -224,5 +224,22 @@
     {% endif %}
   {% endwith %}
   </h4>
+  <h4>
+    {% with admin= get_flashed_messages(category_filter=["admin"]) %}
+    {% if admin %}
+      <div class="panel panel-success copyright-wrap sharp" id="copyright-wrap">
+        <div class="panel-body">
+            <button type="button" class="close" data-target="#copyright-wrap" data-dismiss="alert">
+              <span aria-hidden="true">&times;</span>
+              <span class="sr-only">Close</span>
+            </button>
+           {%- for msg in partdelete %}
+            {{ msg }}
+           {% endfor -%}
+        </div>
+      </div>
+    {% endif %}
+  {% endwith %}
+  </h4>
   </section>
 </header>
