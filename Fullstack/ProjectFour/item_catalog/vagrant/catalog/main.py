@@ -115,7 +115,6 @@ def showLogin():
     print('The current session state is %s' % login_session['state'])
     return render_template('login.html', STATE=state)
 
-
 """
 GOOGLE OAUTH LOGIN API
 Authenticates the user with Google Plus Account
