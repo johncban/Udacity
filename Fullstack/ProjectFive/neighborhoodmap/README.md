@@ -2,7 +2,7 @@
 
 This project demonstrates the use of KnockoutJS Framework using Google Map API as the front end map, Google Place API as the backend source of place listings and Dark Sky API for weather information of the map's location.
 
-This project also demonstrate HTML 5's Geolocation that detect the user's browser location then Google Map, Dark Sky API and Google Places utilize the geolocation to fetch the required information around the Geolocation's radius.
+This project also demonstrate HTML 5's [Geolocation](https://developers.google.com/maps/documentation/javascript/examples/map-geolocation) that detect the user's browser location then Google Map, Dark Sky API and Google Places utilize the geolocation to fetch the required information around the Geolocation's radius.
 
 Under MVVM framework of KnockoutJS, the Model is Geolocation that utilize the said API for View.
 
