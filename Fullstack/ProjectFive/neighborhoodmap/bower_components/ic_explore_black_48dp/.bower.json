@@ -1,0 +1,14 @@
+{
+  "name": "ic_explore_black_48dp",
+  "_cacheHeaders": {
+    "ETag": "\"2dbd112509c207f22974feae0d74af8270998c35\"",
+    "Content-Length": "624",
+    "Content-Type": "image/png"
+  },
+  "_release": "e-tag:2dbd11250",
+  "main": "ic_explore_black_48dp.png",
+  "_source": "https://raw.githubusercontent.com/google/material-design-icons/master/action/drawable-mdpi/ic_explore_black_48dp.png",
+  "_target": "*",
+  "_originalSource": "https://raw.githubusercontent.com/google/material-design-icons/master/action/drawable-mdpi/ic_explore_black_48dp.png",
+  "_direct": true
+}

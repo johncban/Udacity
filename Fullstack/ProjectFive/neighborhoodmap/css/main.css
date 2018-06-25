@@ -1,0 +1,203 @@
+html,
+body, #map {
+	font-family: Arial, sans-serif;
+	height: 100%;
+	width: 100%;
+	margin: 0;
+	padding: 0;
+	bottom: 0%;
+	top: 0%;
+}
+
+.container {
+	height: 100%;
+	position: relative;
+}
+
+
+#hide-listings,
+#show-listings {
+	width: 48%;
+}
+
+
+.map { 
+    height:100%; 
+    width:100%;
+    position: absolute;
+}
+
+.dash-btn {
+	opacity: 0.6;
+	z-index: 99;
+	position: absolute;
+	top: 6%;
+	left: 2%;
+}
+
+.dash-btn:hover {
+	opacity: 1;
+}
+
+.options-box {
+	background: rgba(179, 176, 176, 0.452);
+	opacity: 0.9;
+    filter: alpha(opacity=90);
+	height: auto;
+    padding: 1%;
+	width: auto;
+	z-index: 99;
+	position: relative;
+	overflow-x: hidden;
+    position: fixed;
+	top: 15%;
+	display: block;
+	margin: 1%;
+}
+
+.results-box {
+	opacity: 0.9;
+	height: 180px;
+	width: auto;
+	z-index: 99;
+	position: relative;
+	display: block;
+	margin: 1%;
+	overflow: auto;
+	cursor: pointer;
+}
+
+.infobox-address-head {
+	font-size-adjust: initial;
+	font-size: 16px;
+	color: #6F9ACB;
+}
+
+.infobox-address {
+	font-size: 14px;
+	color: #7E7C7F;
+}
+
+.infobox-address-phone {
+	font-size: 12px;
+	color: #7E7C7F;
+}
+
+
+
+.pano-info-box {
+    width: 250px; height: auto;
+    margin: 5%;
+    background: #6F9ACB;
+}
+
+.pano-header {
+    font-size: 16px;
+    color: #FFFFFF;
+    width: 50%;
+}
+
+.weather-box {
+	background: rgba(179, 176, 176, 0.452);
+	opacity: 0.9;
+    filter: alpha(opacity=90);
+	height: auto;
+	width: auto;
+	z-index: 99;
+    position: fixed;
+	display: block;
+	bottom: 0;
+	left: 0;
+	padding: 8px;
+}
+
+.weather-temp {
+	font-weight: bold;
+	padding: 0%;
+	margin: 0%;
+}
+
+.weather-icon {
+	position: absolute;
+	bottom: 60%;
+	left: 65%;
+}
+
+.weather-loc {
+	padding: 0%;
+	font-size: 10px;
+	width: 100%;
+}
+
+.weather-min-forecast {
+	font-size: 16px;
+	background: rgba(60, 161, 209, 0.6);
+	padding: 1%;
+	align-content: inherit;
+	font-weight: bold;
+	color: #FFFFFF;
+}
+
+.weather-p {
+	font-size: 14px;
+	background: rgba(60, 161, 209, 0.6);
+	padding: 1%;
+	align-content: inherit;
+	color: #FFFFFF;
+}
+
+.weather-alert {
+	color: red;
+	font-weight: bold;
+	padding: 1%;
+	margin: 0%;
+}
+
+tbody td{
+	padding: 5px;
+}
+
+tbody tr:nth-child(odd){
+	background-color:#fff;
+	color: #000000;
+}
+
+
+#pano {
+        width: auto;
+        height: 250px;
+}
+
+#panoView {
+	width: auto;
+	height: 250px;
+}
+
+
+@media (orientation: portrait) and
+    (min-width: 300px) {
+        .options-box{
+            width: 200px;
+            font-size: 12px;
+        }
+        .results-box {
+            width: auto;
+            font-size: 12px;
+		}
+		.pano-info-box {
+			width: auto;
+			height: 25%;
+		}
+}
+
+@media (orientation: landscape) and
+    (min-width: 500px) {
+        .options-box{
+            width: 200px;
+            font-size: 12px;
+        }
+        .results-box {
+            width: auto;
+            font-size: 12px;
+        }
+}

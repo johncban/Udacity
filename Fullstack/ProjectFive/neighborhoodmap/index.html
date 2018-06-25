@@ -1,0 +1,89 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Personal Emergency Map</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="bower_components/material-design-lite/material.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="weather-box" data-bind="visible: showWeatherInfo">
+            <h2 class="weather-temp" id="temp">
+            </h2>
+            <canvas class="weather-icon" id="iconW" width="100" height="100">
+            </canvas>
+            <p class="weather-loc" id="location">
+            </p>
+            <hr>
+            <div class="weather-min-forecast" id="minutely">
+            </div>
+            <p class="weather-p" id="tmz">
+            </p>
+            <h2 class="weather-alert" id="alrt">
+            </h2>
+        </div>
+        <div class="dash-btn" data-bind="click: fadeTag">
+            <button class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--raised mdl-shadow--8dp">
+                <img src="bower_components/ic_explore_black_48dp/ic_explore_black_48dp.png">
+            </button>
+        </div>
+        <div class="options-box" data-bind="visible: showMapOptions">
+            <h5>Emergency Map</h5>
+            <div>
+                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="hospital">
+                    <input id="hospital" class="mdl-radio__button" name="locationType" type="radio" data-bind="checked:placeType" value="Hospital"
+                    />
+                    <span class="mdl-radio__label">
+                        Hospitals
+                    </span>
+                </label>
+            </div>
+            <div>
+                <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="police">
+                    <input id="police" class="mdl-radio__button" name="locationType" type="radio" data-bind="checked:placeType" value="Police"
+                    />
+                    <span class="mdl-radio__label">
+                        Police Stations
+                    </span>
+                </label>
+            </div>
+            <label class="mdl-radio mdl-js-radio mdl-js-ripple-effect" for="firestations">
+                <input id="firestations" class="mdl-radio__button" name="locationType" type="radio" data-bind="checked:placeType" value="FireStations"
+                />
+                <span class="mdl-radio__label">
+                    Fire Stations
+                </span>
+            </label>
+            <div class="results-box">
+                <table>
+                    <thead>
+                        <tr>
+                            <th data-bind="text:placeType"></th>
+                        </tr>
+                    </thead>
+                    <tbody data-bind="foreach: allPlaces">
+                        <tr>
+                            <td data-bind="text: name, click: listClick"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="mp-c" class="map"></div>
+
+    </div>
+    <script type="text/javascript" src="bower_components/jquery.min/jquery.min.js"></script>
+    <script type="text/javascript" src="bower_components/knockout/knockout.js"></script>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGWK3QBXHdMOIYrSm3zAcNRFiChj9lcHI&libraries=places&callback=appStart"></script>
+    <script type="text/javascript" src="js/mapApp.js"></script>
+    <script type="text/javascript" src="bower_components/material-design-lite/material.min.js"></script>
+    <script async defer src="https://gitcdn.link/cdn/darkskyapp/skycons/master/skycons.js"></script>
+</body>
+
+</html>
