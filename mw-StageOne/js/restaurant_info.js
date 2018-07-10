@@ -15,7 +15,7 @@ initMap = () => {
   fetchRestaurantFromURL((error, restaurant) => {
     if (error) { // Got an error!
       console.error(error);
-    } else {      
+    } else {
       self.newMap = L.map('map', {
         center: [restaurant.latlng.lat, restaurant.latlng.lng],
         zoom: 16,
@@ -27,7 +27,7 @@ initMap = () => {
         attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
           '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
           'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-        id: 'mapbox.streets'    
+        id: 'mapbox.streets'
       }).addTo(newMap);
       fillBreadcrumb();
       DBHelper.mapMarkerForRestaurant(self.restaurant, self.newMap);
@@ -40,7 +40,7 @@ initMap = () => {
  * Initialize Google Map
  */
 
- /*
+/*
 window.initMap = () => {
   fetchRestaurantFromURL((error, restaurant) => {
     if (error) { // Got an error!
@@ -90,6 +90,9 @@ fetchRestaurantFromURL = (callback) => {
 fillRestaurantHTML = (restaurant = self.restaurant) => {
   const name = document.getElementById('restaurant-name');
   name.innerHTML = restaurant.name;
+  name.style.color = "#333"; //https://www.w3schools.com/js/js_htmldom_css.asp
+  name.style.margin = "25px 0px 25px 5px";
+  name.style.fontSize = "24px";
 
   const address = document.getElementById('restaurant-address');
   address.innerHTML = restaurant.address;
@@ -137,8 +140,9 @@ fillRestaurantHoursHTML = (
  */
 fillReviewsHTML = (reviews = self.restaurant.reviews) => {
   const container = document.getElementById('reviews-container');
-  const title = document.createElement('h2');
+  const title = document.createElement('h3');
   title.innerHTML = 'Reviews';
+  title.style.color = "#FDA428"; //https://www.w3schools.com/js/js_htmldom_css.asp
   container.appendChild(title);
 
   if (!reviews) {
