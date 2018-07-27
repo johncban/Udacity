@@ -1,0 +1,14 @@
+{
+  "name": "knockout",
+  "_cacheHeaders": {
+    "ETag": "\"100b53b03b6d444c5fbb0ec33d7f6f9ac7489524\"",
+    "Content-Length": "17498",
+    "Content-Type": "text/plain; charset=utf-8"
+  },
+  "_release": "e-tag:100b53b03",
+  "main": "knockout.js",
+  "_source": "https://raw.githubusercontent.com/bowerjs/knockout/master/knockout.js",
+  "_target": "*",
+  "_originalSource": "https://raw.githubusercontent.com/bowerjs/knockout/master/knockout.js",
+  "_direct": true
+}

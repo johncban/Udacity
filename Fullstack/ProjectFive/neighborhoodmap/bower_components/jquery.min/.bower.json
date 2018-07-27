@@ -1,0 +1,14 @@
+{
+  "name": "jquery.min",
+  "_cacheHeaders": {
+    "ETag": "\"4d9b3a258759c53e7bc66b6fc554c51e2434437c\"",
+    "Content-Length": "30351",
+    "Content-Type": "text/plain; charset=utf-8"
+  },
+  "_release": "e-tag:4d9b3a258",
+  "main": "jquery.min.js.js",
+  "_source": "https://raw.githubusercontent.com/jquery/jquery-dist/master/dist/jquery.min.js",
+  "_target": "*",
+  "_originalSource": "https://raw.githubusercontent.com/jquery/jquery-dist/master/dist/jquery.min.js",
+  "_direct": true
+}
