@@ -25,8 +25,12 @@
     "./lib/.bower_components",
     "test",
     "tests"
+<<<<<<< HEAD
   ],
   "dependencies": {
     "ic_explore_black_48dp": "https://raw.githubusercontent.com/google/material-design-icons/master/action/drawable-mdpi/ic_explore_black_48dp.png"
   }
+=======
+  ]
+>>>>>>> 2a3d42865c2b64c2f35281ad9db6532004aad0b6
 }
