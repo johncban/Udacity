@@ -10,7 +10,7 @@ Under MVVM framework of KnockoutJS, the Model is based in Geolocation that utili
 
 There are two alternative to run the project.
 
-1. Click [here](https://johncban.github.io/Sandbox/) for the live demo.
+1. Click [here](https://johncban.github.io/neighborhoodmap/) for the live demo.
 
 2. Run Python simpleHTTP Server or ```localserv.py``` in your command line or terminal.
 
