@@ -495,6 +495,11 @@ function appViewModel() {
         $('#mp-c').html("Google Maps Fails to Load >5 sec. Please Check your Internet Connection of Refresh the Web Browser");
         console.log("Google Maps Fails to Load >5 sec. Please Check your Internet Connection of Refresh the Web Browser");
     }
+    
+    // Popout Alert - Google map error handling.    
+    function googleError() {
+        alert("An error while loading Google Maps occurred, please try to reload the page.");
+    };
 
     /**
      * Dark Sky API declaration under weather function.
