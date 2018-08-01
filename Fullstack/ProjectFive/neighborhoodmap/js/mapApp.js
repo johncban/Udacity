@@ -1,7 +1,15 @@
-/* mapApp.js -- stable */
+/**
+ * mapApp.js
+ * STABLE: Personal Emergency WEB App 
+ * BETA PROTOTYPE ver.1.1.0.
+ * Student: Juan Carlo A. Banayo 
+ * Udacity: FSND 
+ * Project 4: Neighborhood App (KnockoutJS Framework)
+ */
 
 /**
- * Create constant self variable that store function owner or "this".
+ * Create global self variable that store function owner or "this".
+ * NOTE: Constant cannot change in re-declaration. Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/const
  */
 
 var self = this;
@@ -28,11 +36,10 @@ function appViewModel() {
     self.showWeatherInfo = ko.observable(true);
     self.showMapOptions = ko.observable(false);
 
+    self.showPlaceList = ko.observable(true);
+
+    // Set Default Local location to New York.
     self.localLocation = new google.maps.LatLng(40.7058683, -74.0135793);
-    self.placeArray = ko.observableArray([]);
-
-    self.markerCount = ko.observable("");
-
 
     /**
      * Declare Global Variables for mp(map), infoWindow, trafficLayer and mpStartUpTimer
@@ -40,17 +47,27 @@ function appViewModel() {
     var mp, infoWindow;
     var trafficLayer = new google.maps.TrafficLayer();
     var bikeLayer = new google.maps.BicyclingLayer();
+    var placeArray = [];
 
-    var mpStartUpTimer = window.setTimeout(mapException, 6000);
+    var mpStartUpTimer = window.setTimeout(mapException, 5000);
+
+
+
+    // Search and calculate the center of the map for latitude and longitude
+    function cmpCtr() {
+        var latAndLng = mp.getCenter();
+        lat = latAndLng.lat();
+        lng = latAndLng.lng();
+    }
+
 
     /* Seach Option Show */
     self.fadeTag = function (data, event) {
         self.showMapOptions(!self.showMapOptions());
         self.showWeatherInfo(!self.showWeatherInfo()); /* http://jsfiddle.net/FgVxY/672/ */
         uncheckRadio();
-        clearMarker();
     };
-
+    /* Uncheck Radio Controls Function */
     self.uncheckRadio = function () {
         document.getElementById('hospital').parentNode.MaterialRadio.uncheck();
         document.getElementById('police').parentNode.MaterialRadio.uncheck();
@@ -62,8 +79,6 @@ function appViewModel() {
      * Start Map App
      */
     self.initMp = function () {
-        weather(); // Call Weather API inside the init function.
-
         /**
          * Google Map's Style Theme: Aquamarine
          */
@@ -406,13 +421,14 @@ function appViewModel() {
             }
         ];
 
-        // Map Declaration Call
+        infoWindow = new google.maps.InfoWindow();
+
+        // Map or mp declaration    
         mp = new google.maps.Map(document.getElementById('mp-c'), {
-            zoom: 15,
+            center: localLocation,
             styles: styleTheme,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         });
-
 
         // Map Traffic Feature
         trafficLayer.setMap(mp);
@@ -421,8 +437,12 @@ function appViewModel() {
         // Declare infoWindow for user's geolocation.
         infoWindow = new google.maps.InfoWindow();
 
-        setCurrentLocation();
-        centerMap(localLocation);
+        // Functions to run in the initialized app
+        weather(); // Weather API (Third Party)
+        getPlaces(); // Google Places API
+        cmpCtr(); // mp center calculator
+        setCurrentLocation(); // Geolocator API (HTML-5 Native)
+        searchBar(); // Google Place Search Autocomplete API
 
         // Timer to determine the startup quality of Google Map API
         google.maps.event.addListener(mp, 'tilesloaded', function () {
@@ -430,44 +450,51 @@ function appViewModel() {
         });
     };
 
-    // If Google Map failed to load it will load mapException.
-    function mapException() {
-        alert("Google Maps Fails to Load. Please Check your Internet Connection");
-    }
+    // Call the app or map initialization
+    self.initMp();
 
-    // Initiate google autocomplete text box search
+    /**
+     * Autocomplete Google Places API search box.
+     */
     function searchBar() {
         var input = document.getElementById('search-input');
         var searchTextBox = new google.maps.places.SearchBox(input);
 
         google.maps.event.addListener(searchTextBox, 'places_changed', function () {
             var places = searchTextBox.getPlaces();
-            clearMarker();
-            clbckList();
-            self.allPlaces.removeAll();
-
             var bounds = new google.maps.LatLngBounds();
 
+            // Clear current markers and list of places while using the searchBar().
+            clearMarker();
+            self.allPlaces.removeAll();
+
+            // Gather all the required places that are not undefined then generate the marker from the collected list of places.
             for (var i = 0, place; i < 10; i++) {
                 if (places[i] !== undefined) {
                     place = places[i];
-
                     getAllPlaces(place);
                     createMarker(place);
                     bounds.extend(place.geometry.location);
                 }
             }
             mp.fitBounds(bounds);
-            centerMap(mp);
+            cmpCtr(mp);
         });
+
+        // Automatically change the mp's boundary after places_changed from searchTextBox listener.
         google.maps.event.addListener(mp, 'bounds_changed', function () {
             var bounds = mp.getBounds();
             searchTextBox.setBounds(bounds);
         });
     }
 
-    // Calling initMp to initialize
-    self.initMp();
+
+    // If Google Map failed to load it will load mapException.
+    function mapException() {
+        alert("Google Maps Fails to Load in >5 sec. Please Check your Internet Connection of Refresh the Web Browser");
+        $('#mp-c').html("Google Maps Fails to Load >5 sec. Please Check your Internet Connection of Refresh the Web Browser");
+        console.log("Google Maps Fails to Load >5 sec. Please Check your Internet Connection of Refresh the Web Browser");
+    }
 
     /**
      * Dark Sky API declaration under weather function.
@@ -493,7 +520,6 @@ function appViewModel() {
                 });
                 var icon = data.currently.icon;
 
-
                 $('#temp').html(data.currently.temperature + '°F');
                 $('#minutely').html(data.currently.summary);
                 $('#tmz').html(data.daily.summary);
@@ -509,19 +535,14 @@ function appViewModel() {
         // If location cannot be detected, API key is invalid and other erroneous factors happen it will inform the user that it failed to load the API.
         function error() {
             alert("Unable to retrieve your location. Please check your web browser or your internet connection");
+            console.log("Unable to retrieve your location. Please check your web browser or your internet connection");
             console.log(location.innerHTML);
         }
         // Location loader
-        location.innerHTML = "Finding Your Current Location...";
+        location.innerHTML = "Searching Your Current Location...";
+        console.log("Searching Your Current Location...");
     }
 
-    /**
-     * A function that adjust the map's location and resize event.
-     */
-    function centerMap(location) {
-        mp.setCenter(location);
-        google.maps.event.trigger(mp, 'resize');
-    }
 
     /**
      * A geolocation loader for Google Map and Google Place.
@@ -533,7 +554,7 @@ function appViewModel() {
 
                 var origin = new google.maps.Circle({
                     map: mp,
-                    radius: Math.sqrt(10) * 100, 
+                    radius: Math.sqrt(10) * 100,
                     fillColor: '#E8453C',
                     fillOpacity: 0.45,
                     center: position,
@@ -541,16 +562,10 @@ function appViewModel() {
                     strokeOpacity: 0.50
                 });
 
-                self.pos = {
+                var pos = {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 };
-
-                // Start getPlaces function to gather place of interest in the current browser's location.
-                getPlaces();
-                listAllPlaces();
-
-                searchBar();
 
                 infoWindow.setPosition(pos);
                 infoWindow.setContent(infoLoc);
@@ -590,92 +605,253 @@ function appViewModel() {
         infoWindow.open(mp);
     };
 
-    /**
-     * A function that gathers places of interest (police, hospital and fire stations) in regards to radius of the user's current location.
-     */
+
+    /*
+    Function to pre-populate the map with place types.  nearbySearch retuns up to 20 places.
+    */
     function getPlaces() {
-        infowindow = new google.maps.InfoWindow();
-        service = new google.maps.places.PlacesService(mp);
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
 
-        var Hospital = {
-            location: pos,
-            radius: 2500,
-            types: ['hospital']
-        };
+                var Hospital = {
+                    location: pos,
+                    radius: 4000,
+                    types: ['hospital']
+                };
 
-        var FireStations = {
-            location: pos,
-            radius: 2500,
-            types: ['fire_station']
-        };
+                var FireStations = {
+                    location: pos,
+                    radius: 4000,
+                    types: ['fire_station']
+                };
 
-        var Police = {
-            location: pos,
-            radius: 2500,
-            types: ['police']
-        };
+                var Police = {
+                    location: pos,
+                    radius: 4000,
+                    types: ['police']
+                };
 
-        /**
-         * Pushes the address and phone number of placeCategory to the list  via getAllPlaces and callback for markers.
-         * It also utilize the radio box to filter getAllPlaces through placeType.
-         * */
-        self.placeCategory = ko.computed(function () {
-            if (self.placeType() == "Hospital") {
+                infowindow = new google.maps.InfoWindow();
+                service = new google.maps.places.PlacesService(mp);
                 service.nearbySearch(Hospital, callback);
-            }
-
-            if (self.placeType() == "FireStations") {
                 service.nearbySearch(FireStations, callback);
-            }
-
-            if (self.placeType() == "Police") {
                 service.nearbySearch(Police, callback);
+
+                /**
+                 * Pushes the address and phone number of placeCategory to the list  via getAllPlaces and callback for markers.
+                 * It also utilize the radio box to filter getAllPlaces through placeType.
+                 * */
+                self.placeCategory = ko.computed(function () {
+                    if (self.placeType() == "Hospital") {
+                        service.nearbySearch(Hospital, callback);
+                        clearMarker();
+                        self.allPlaces.removeAll();
+                    }
+
+                    if (self.placeType() == "FireStations") {
+                        service.nearbySearch(FireStations, callback);
+                        clearMarker();
+                        self.allPlaces.removeAll();
+                    }
+
+                    if (self.placeType() == "Police") {
+                        service.nearbySearch(Police, callback);
+                        clearMarker();
+                        self.allPlaces.removeAll();
+                    }
+                    return [];
+                }, this);
+
+
+            }, function () {
+                handleLocationError(true, infoWindow, mp.getCenter());
+            });
+        } else {
+            handleLocationError(false, infoWindow, mp.getCenter());
+        }
+    }
+
+    /*
+    Gets the callback from Google and creates a marker for each place.  Sends info to getAllPlaces.
+    */
+    function callback(results, status) {
+        var res = results.length;
+
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+            bounds = new google.maps.LatLngBounds();
+            results.forEach(function (place) {
+
+                // https://stackoverflow.com/questions/24844915/google-maps-marker-show-hide
+                $('#hideMrkr').click(function () {
+                    if (!place.marker.getVisible()) {
+                        place.marker.setVisible(true);
+                    } else {
+                        clearMarker();
+                        self.allPlaces.removeAll();
+                        self.showPlaceList(!self.showPlaceList());
+                    }
+                });
+
+                place.marker = createMarker(place);
+                bounds.extend(new google.maps.LatLng(
+                    place.geometry.location.lat(),
+                    place.geometry.location.lng()));
+            });
+            mp.fitBounds(bounds);
+            results.forEach(getAllPlaces);
+        }
+        $(".placepop").html((placeType()) + ": " + res);
+    }
+
+
+    // https://stackoverflow.com/questions/37214504/how-to-test-for-google-maps-place-type-with-if-conditional
+    function isInArray(a, b) {
+        return !!~a.indexOf(b);
+    }
+
+
+    /*
+    Function to create a marker at each place.  This is called on load of the map with the pre-populated list, and also after each search.  Also sets the content of each place's infowindow.
+    */
+    function createMarker(place) {
+        var icons = {
+            url: place.icon,
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(17, 34),
+            scaledSize: new google.maps.Size(25, 25)
+        };
+
+        var marker = new google.maps.Marker({
+            map: mp,
+            icon: icons,
+            name: place.name.toLowerCase(),
+            position: place.geometry.location,
+            place_id: place.place_id,
+            animation: google.maps.Animation.DROP
+        });
+
+        var address;
+        if (place.vicinity !== undefined) {
+            address = place.vicinity;
+        } else if (place.formatted_address !== undefined) {
+            address = place.formatted_address;
+        }
+
+        // Declare variable to initiate Google Place Service.
+        var detailsService = new google.maps.places.PlacesService(mp);
+
+        //var contentString = '<div style="font-weight: bold">' + place.name + '</div><div>' + address + '</div>';
+
+
+        var circleHospital = new google.maps.Circle({
+            map: mp,
+            radius: Math.sqrt(place.rating) * 100,
+            fillColor: '#FF0000',
+            fillOpacity: 0.5,
+            center: place.center,
+            strokeColor: '#FFFFFF',
+            strokeOpacity: 0.50
+        });
+        var circlePolice = new google.maps.Circle({
+            map: mp,
+            radius: Math.sqrt(place.rating) * 100,
+            fillColor: '#007ACC',
+            fillOpacity: 0.5,
+            center: place.center,
+            strokeColor: '#FFFFFF',
+            strokeOpacity: 0.50
+        });
+        var circleFire = new google.maps.Circle({
+            map: mp,
+            radius: Math.sqrt(place.rating) * 100,
+            fillColor: '#FC532A',
+            fillOpacity: 0.5,
+            center: place.center,
+            strokeColor: '#FFFFFF',
+            strokeOpacity: 0.50
+        });
+
+        google.maps.event.addListener(marker, 'click', function () {
+            /* https://developers.google.com/maps/documentation/javascript/examples/place-details */
+            /* https://developers.google.com/web/fundamentals/native-hardware/click-to-call/ */
+            detailsService.getDetails({
+                placeId: place.place_id
+            }, function (place, status) {
+                if (status === google.maps.places.PlacesServiceStatus.OK) {
+                    google.maps.event.addListener(marker, 'click', function () {
+                        console.error(status);
+                        return;
+                    });
+                }
+
+                // Address logic for the specific marker if the marker is registered to Google details. Otherwise use place.vicinity
+                var adrs;
+                if (place.vicinity == undefined) {
+                    adrs = place.vicinity;
+                } else if (place.formatted_address !== undefined) {
+                    adrs = place.formatted_address;
+                }
+
+                var rate;
+                if (place.rating == undefined) {
+                    rate = "Not Available";
+                    alert("Radius and Location Rating Not Available");
+                } else if (place.rating !== undefined) {
+                    rate = place.rating;
+                }
+
+                var phne;
+                if (place.formatted_phone_number == undefined) {
+                    phne = "Not Available";
+                    alert("Phone Not Available for this Place");
+                } else if (place.formatted_phone_number !== undefined) {
+                    phne = place.formatted_phone_number;
+                }
+
+                infowindow.setContent('<div><strong class="infobox-address-head">' + place.name + '</strong><br>' + '<strong class="infobox-address">' +
+                    adrs + '</strong>' + '<br>' + '<strong class="infobox-address-phone">' + 'Phone: ' + '<a class="infobox-address-phone" href="tel:+1-' +
+                    phne + '">' + phne + '</a>' + '</strong>' + '<b>' + '<p class="infobox-rating">' + '<hr>' + "Location Rating: " + rate + '</p>' + '</div>');
+            });
+            infowindow.open(mp, this);
+            mp.panTo(marker.position);
+            marker.setAnimation(google.maps.Animation.BOUNCE);
+
+            if (isInArray(place.types, "hospital")) {
+                circleHospital.bindTo('center', marker, 'position');
             }
-            return [];
-        }, this);
+
+            if (isInArray(place.types, "police")) {
+                circlePolice.bindTo('center', marker, 'position');
+            }
+
+            if (isInArray(place.types, "fire_station")) {
+                circleFire.bindTo('center', marker, 'position');
+            }
+
+            $('#hideMrkr').click(function () {
+                // https://stackoverflow.com/questions/8260029/how-to-remove-circle-from-google-maps-v3
+                circleHospital.setMap(null);
+                circlePolice.setMap(null);
+                circleFire.setMap(null);
+            });
+
+            setTimeout(function () {
+                marker.setAnimation(null);
+            }, 1450);
+        });
+
+        placeArray.push(marker);
+        return marker;
     }
 
 
-    function listAllPlaces() {
-        service = new google.maps.places.PlacesService(mp);
-
-        var requestOne = {
-            location: pos,
-            radius: 2500,
-            types: ['hospital']
-        };
-
-        var requestTwo = {
-            location: pos,
-            radius: 2500,
-            types: ['fire_station']
-        };
-
-        var requestThree = {
-            location: pos,
-            radius: 2500,
-            types: ['police']
-        };
-
-        self.placeCategory = ko.computed(function () {
-            service.nearbySearch(requestOne, clbckList);
-            service.nearbySearch(requestTwo, clbckList);
-            service.nearbySearch(requestThree, clbckList);
-            return [];
-        }, this);
-    }
-
-    // Pushes the name of places dictated by place types from google's place API.
-    function getAllPlaces(place) {
-        var myPlace = {};
-        myPlace.name = place.name;
-        myPlace.place_id = place.place_id;
-
-        allPlaces.push(myPlace);
-    }
-
-
-    // Creates all list a link to open the marker defined from allPlaces (see getAllPlaces function).
+    /*
+    Function that will pan to the position and open an info window of an item clicked in the list.
+    */
     self.listClick = function (place) {
         var marker;
         var streetVS = new google.maps.StreetViewService();
@@ -691,6 +867,8 @@ function appViewModel() {
         // Initiates the panoramic street view for the infowindow in each list.
         var getStreetView = function (data, status) {
             if (status == google.maps.StreetViewStatus.OK) {
+                console.log(data);
+
                 var nearStreetViewLocation = data.location.latLng;
                 var heading = google.maps.geometry.spherical.computeHeading(nearStreetViewLocation, marker.position);
                 var contentView = '<div class="pano-info-box">' + '<b class="pano-header">' + place.name + '</b>' + '<br>' + '<div id="pano"></div>' + '</div>';
@@ -723,64 +901,15 @@ function appViewModel() {
         }, 1450);
     };
 
-    /**
-     * Its a function that supports getAllPlaces function in regards
-     * to the location attributes of each listed place and markers.
-     */
-    function callback(results, status) {
-        var res = results.length;
-
-        if (status == google.maps.places.PlacesServiceStatus.OK) {
-            clearMarker();
-            self.allPlaces.removeAll();
-            bounds = new google.maps.LatLngBounds();
-
-            results.forEach(function (place) {
-                place.marker = createMarker(place);
-                bounds.extend(new google.maps.LatLng(
-                    place.geometry.location.lat(),
-                    place.geometry.location.lng()));
-
-                // Reveal number of place type venues in each place type category.
-                $(".placepop").html((placeType()) + ": " + res);
-            });
-            mp.fitBounds(bounds);
-            results.forEach(getAllPlaces);
-        }
-    }
 
 
-    function clbckList(results, status) {
-        if (status == google.maps.places.PlacesServiceStatus.OK) {
-            bounds = new google.maps.LatLngBounds();
-            results.forEach(function (place) {
-                place.marker = createMarker(place);
+    // Pushes the name of places dictated by place types from google's place API.
+    function getAllPlaces(place) {
+        var myPlace = {};
+        myPlace.name = place.name;
+        myPlace.place_id = place.place_id;
 
-                // https://stackoverflow.com/questions/24844915/google-maps-marker-show-hide
-                $('#hideMrkr').click(function () {
-                    if (!place.marker.getVisible()) {
-                        place.marker.setVisible(true);
-                        if (self.showMapOptions()) {
-                            self.allPlaces.removeAll();
-                        }
-                    } else {
-                        place.marker.setVisible(false);
-                    }
-                });
-                bounds.extend(new google.maps.LatLng(
-                    place.geometry.location.lat(),
-                    place.geometry.location.lng()
-                ));
-            });
-
-            mp.fitBounds(bounds);
-            results.forEach(getAllPlaces);
-        }
-    }
-
-    // https://stackoverflow.com/questions/37214504/how-to-test-for-google-maps-place-type-with-if-conditional
-    function isInArray(a, b) {
-        return !!~a.indexOf(b);
+        allPlaces.push(myPlace);
     }
 
 
@@ -792,134 +921,6 @@ function appViewModel() {
             placeArray[i].setMap(null);
         }
         self.placeArray = [];
-    }
-
-    /**
-     * A funciton to generate markers that open infowindow details view
-     * (i.e. phone number and exact address).
-     */
-    function createMarker(place) {
-        var icons = {
-            url: place.icon,
-            origin: new google.maps.Point(0, 0),
-            anchor: new google.maps.Point(17, 34),
-            scaledSize: new google.maps.Size(25, 25)
-        };
-        var marker = new google.maps.Marker({
-            map: mp,
-            position: place.geometry.location,
-            icon: icons,
-            place_id: place.place_id,
-            animation: google.maps.Animation.DROP
-        });
-
-
-        var circleHospital = new google.maps.Circle({
-            map: mp,
-            radius: Math.sqrt(place.rating) * 100,
-            fillColor: '#FF0000',
-            fillOpacity: 0.5,
-            center: place.center,
-            strokeColor: '#FFFFFF',
-            strokeOpacity: 0.50
-        });
-        var circlePolice = new google.maps.Circle({
-            map: mp,
-            radius: Math.sqrt(place.rating) * 100,
-            fillColor: '#007ACC',
-            fillOpacity: 0.5,
-            center: place.center,
-            strokeColor: '#FFFFFF',
-            strokeOpacity: 0.50
-        });
-        var circleFire = new google.maps.Circle({
-            map: mp,
-            radius: Math.sqrt(place.rating) * 100,
-            fillColor: '#FC532A',
-            fillOpacity: 0.5,
-            center: place.center,
-            strokeColor: '#FFFFFF',
-            strokeOpacity: 0.50
-        });
-
-
-        // Declare variable to initiate Google Place Service.
-        var detailsService = new google.maps.places.PlacesService(mp);
-
-        google.maps.event.addListener(marker, 'click', function () {
-            /* https://developers.google.com/maps/documentation/javascript/examples/place-details */
-            /* https://developers.google.com/web/fundamentals/native-hardware/click-to-call/ */
-            detailsService.getDetails({
-                placeId: place.place_id
-            }, function (place, status) {
-                if (status === google.maps.places.PlacesServiceStatus.OK) {
-                    google.maps.event.addListener(marker, 'click', function () {
-                        console.error(status);
-                        return;
-                    });
-                }
-
-                // Address logic for the specific marker if the marker is registered to Google details. Otherwise use place.vicinity.
-                var adrs;
-                if (place.vicinity == undefined) {
-                    adrs = place.vicinity;
-                } else if (place.formatted_address !== undefined) {
-                    adrs = place.formatted_address;
-                }
-                // Rating if else conditional error handling.
-                var rate;
-                if (place.rating == undefined) {
-                    rate = "Not Available";
-                    alert("Radius and Location Rating Not Available");
-                } else if (place.rating !== undefined) {
-                    rate = place.rating;
-                }
-                // Phone number if else conditional error handling.
-                var phne;
-                if (place.formatted_phone_number == undefined) {
-                    phne = "Not Available";
-                    alert("Phone Not Available for this Place");
-                } else if (place.formatted_phone_number !== undefined) {
-                    phne = place.formatted_phone_number;
-                }
-                // Infowindow that provide place name, place's rate and place's address.
-                infowindow.setContent('<div><strong class="infobox-address-head">' + place.name + '</strong><br>' + '<strong class="infobox-address">' +
-                    adrs + '</strong>' + '<br>' + '<strong class="infobox-address-phone">' + '<hr>' + 'Phone: ' + '<a href="tel:+1-' +
-                    phne + '">' + phne + '</a>' + '</strong>' + '<b>' + '<p class="infobox-rating">'+"Location Rating: "+rate+'</p>'+'</div>');
-            });
-
-            infowindow.open(mp, this);
-            mp.panTo(marker.position);
-            marker.setAnimation(google.maps.Animation.BOUNCE);
-
-            // Radius array filter
-            if(isInArray(place.types, "hospital")) {
-                circleHospital.bindTo('center', marker, 'position');
-            }
-
-            if(isInArray(place.types, "police")) {
-                circlePolice.bindTo('center', marker, 'position');
-            }
-
-            if(isInArray(place.types, "fire_station")) {
-                circleFire.bindTo('center', marker, 'position');
-            }
-
-            $('#hideMrkr').click(function () {
-                // https://stackoverflow.com/questions/8260029/how-to-remove-circle-from-google-maps-v3
-                circleHospital.setMap(null);
-                circlePolice.setMap(null);
-                circleFire.setMap(null);
-            });
-
-            setTimeout(function () {
-                marker.setAnimation(null);
-            }, 1450);
-        });
-
-        // Push all markers to placeArray observable.
-        placeArray.push(marker);
-        return marker;
     }
 
 }
