@@ -1,0 +1,14 @@
+{
+  "short_name": "RR",
+  "name": "Udacity RR-MWS",
+  "icons": [
+    { "src": "icons/cutlery-1x.png", "type": "image/png", "sizes": "48x48" },
+    { "src": "icons/cutlery-2x.png", "type": "image/png", "sizes": "96x96" },
+    { "src": "icons/cutlery-4x.png", "type": "image/png", "sizes": "192x192" },
+    { "src": "icons/cutlery-10x.png", "type": "image/png", "sizes": "512x512" }
+  ],
+  "theme_color": "#ffa500",
+  "background_color": "#f3f3f3",
+  "display": "fullscreen",
+  "start_url": "/index.html"
+}
