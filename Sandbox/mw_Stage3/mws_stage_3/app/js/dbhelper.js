@@ -16,6 +16,7 @@ const locDB = idb.open("restaurants", 2, upgradeDB => {
   }
 });
 
+
 class DBHelper {
   /**
    * Database URL.
@@ -43,8 +44,8 @@ class DBHelper {
     }
 
     fetch(fetchURL, {
-      method: "GET"
-    })
+        method: "GET"
+      })
       .then(response => {
         response.json().then(restaurants => {
           console.log("restaurants JSON: ", restaurants);
@@ -178,6 +179,7 @@ class DBHelper {
     });
   }
 
+
   /**
    * Save the favorite status in each restaurant.
    */
@@ -205,33 +207,41 @@ class DBHelper {
     });
   }
 
+
   /**
    * Get Restaurant Reviews Per ID
    */
-
   static getRevsByResID(id, callback) {
+    // Fetch all reviews for the specific restaurant
     let linkRev = DBHelper.DATABASE_REV_URL + `/reviews/?restaurant_id=${id}`;
 
     locDB.then(db => {
-      const storeName = "reviews";
+      const storeName = 'reviews';
 
       fetch(linkRev)
         .then(response => response.json())
-        .then(data => callback(null, data))
+        //.then(data => callback(null, data))
         //.catch(err => callback(err, null))
 
+        .then(response => {
+          db.transaction(storeName, 'readwrite')
+            .objectStore(storeName)
+            //.put(response, Number(id))
+            .getAll()
+          return response;
+        })
+        .then(response => callback(null, response))
+
         .catch(error => {
-          console.warn(error);
-          const tx = db.transaction(storeName, "readwrite");
+          console.warn(error)
+          const tx = db.transaction(storeName, 'readwrite');
           const store = tx.objectStore(storeName);
-          store
-            .get(Number(id))
-            .then(response => {
+          store.get(Number(id)).then(response => {
               if (response) return callback(null, response);
             })
-            .catch(callback);
-        });
-    });
+            .catch(callback)
+        })
+    })
   }
 
   /**
@@ -241,20 +251,20 @@ class DBHelper {
     const linkCreateRev = DBHelper.DATABASE_REV_URL + `/reviews`;
 
     return fetch(linkCreateRev, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(review)
     }).catch(error => {
       console.log(error);
       locDB.then(db => {
-        const stName = "reviews";
-        const tx = db.transaction(stName, "readwrite");
+        const stName = 'reviews';
+        const tx = db.transaction(stName, 'readwrite');
         const st = tx.objectStore(stName);
         st.put(review, stName).then(response => {
-          navigator.serviceWorker.ready.then(function(reg) {
-            return reg.sync.register("createRev");
+          navigator.serviceWorker.ready.then(function (reg) {
+            return reg.sync.register('createRev');
           });
-        });
-      });
+        })
+      })
     });
   }
 
@@ -286,8 +296,7 @@ class DBHelper {
   static mapMarkerForRestaurant(restaurant, map) {
     // https://leafletjs.com/reference-1.3.0.html#marker
     const marker = new L.marker(
-      [restaurant.latlng.lat, restaurant.latlng.lng],
-      {
+      [restaurant.latlng.lat, restaurant.latlng.lng], {
         title: restaurant.name,
         alt: restaurant.name,
         url: DBHelper.urlForRestaurant(restaurant)

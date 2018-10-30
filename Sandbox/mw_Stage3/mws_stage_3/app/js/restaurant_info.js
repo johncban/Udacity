@@ -143,7 +143,11 @@ const fillRestaurantHoursHTML = (
 /**
  * Create all reviews HTML and add them to the webpage.
  */
-const fillReviewsHTML = (error, reviews = self.restaurant.reviews) => {
+//const fillReviewsHTML = (error, reviews = self.restaurant.reviews) => {
+  const fillReviewsHTML = (reviews = self.restaurant.reviews) => {
+    //reviews = self.restaurant.reviews, restaurantId = self.restaurant.id;
+    //self.restaurant.reviews = reviews;
+
   /**
    * Modal
    * Source: https://sabe.io/tutorials/how-to-create-modal-popup-box
@@ -181,9 +185,13 @@ const fillReviewsHTML = (error, reviews = self.restaurant.reviews) => {
   mod.append(createReviewCreator(self.restaurant.id));
 
   //debugger;
+
+  /*
   if (error) {
     console.log('Error retrieving reviews', error);
   }
+  */
+
 
   if (!reviews) {
     const noReviews = document.createElement('p');
@@ -191,8 +199,9 @@ const fillReviewsHTML = (error, reviews = self.restaurant.reviews) => {
     container.appendChild(noReviews);
     return;
   }
+  
   const ul = document.createElement('ul')
-  ul.id = 'reviews-list'
+  ul.id = 'reviews-list';
 
   reviews.forEach(review => {
     ul.appendChild(createReviewHTML(review));
@@ -290,10 +299,21 @@ const createReviewCreator = (id) => {
       alert('The name is missing from the form')
       return;
     }
+
+    console.log("Review Name: ", nameInput.value);
+
+    console.log(result);
+
     DBHelper.createRev(result)
       .then(result => {
         fetchReviewsFromURL(fillReviewsHTML, true)
       })
+      .then(error => {
+        if(error) {
+          console.log(error);
+        }
+      })
+
     closeButton.addEventListener("click", toggleModal);
     window.addEventListener("click", windowOnClick);
     trigger.addEventListener("click", toggleModal);
@@ -332,7 +352,8 @@ const createReviewHTML = review => {
   li.appendChild(name);
 
   const date = document.createElement("p");
-  date.innerHTML = review.date;
+  const create = review.createdAt;
+  date.innerHTML = new Date(create).toLocaleString();
   li.appendChild(date);
 
   const rating = document.createElement("p");

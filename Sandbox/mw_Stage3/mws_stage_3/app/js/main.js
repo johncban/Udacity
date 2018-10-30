@@ -175,6 +175,8 @@ createRestaurantHTML = restaurant => {
   imageFav.classList.add('imageFav');
   imageFav.id = restaurant.id;
 
+  
+
 
   if(restaurant.is_fav === true) {
     imageFav.setAttribute('src', '/icons/bookmark-ribbon.png');
