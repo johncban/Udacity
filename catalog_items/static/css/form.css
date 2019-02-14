@@ -1,0 +1,17 @@
+.txt-box {
+    border: 0;
+    outline: 0;
+    background: transparent;
+    border-bottom: 1px solid black;
+    width: 100%;
+    transition: 0.3s;
+  }
+  .txt-box:hover {
+    border-bottom: 1px solid #FDB714;
+    box-shadow: 20px 20px 50px 0px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 20px 20px 50px 0px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 20px 20px 50px 0px rgba(0, 0, 0, 0.5);
+  }
+  .txt-box:focus {
+    border-bottom: 1px solid #2879FF;
+  }

@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "pc-parts-inventory-catalog",
+  "private_key_id": "c86e96fe12e3e87669989b890c6814ad6966e543",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCQBfR3FwvJ5w8r\noAG5+iwdYprrD1ROFgA7pMVURJ4lJHXjDkDfSkfmSGQl1BHmoW7V1HOJKRa8Y2oR\nW9A9k+9nuJMIj5UrQCLcSJ90FkMJVENijjaZHEDVIHq7QpFzMh0wFcC5Nd9aF0LU\nLM1DI4mQ4ux9yzL6I34rkr8aLKjYRecZTJ6moDz+ZmMw54NSB1yWJK+B6VJFNxSA\nDDSyGPK+6tKWyy4S2dAco4vXPR/aKg3JL8lvBX7fe3TU9b2vALJPysv/uFTYz2a1\nrsS7s4QfTf5IOCh+lBXEUL1EyNBakICdBmlOewaQ64ThdaF6fLO8uavCuv7O5t0N\nU9klvtyZAgMBAAECggEABMYRwY3DwAQ22kMSM5QheLLfQCnQqUrs5I00VjP1CvWf\nq7A6AbywT+d33FIgasTQi+lgD/yK6qEf76Xbq+LWpVk2lGrP7rBQR31nvZ0MSUef\n+SkOEbqgQoAyWTkeYZNYaNLbwbfRqKaLOkWm4xIPOfxvisbcsHJTOQYC7A7tZMe1\noQInR+a/RpBIr++0VbfGAfoaEBrZ5HhUjxMIfDy2aiwhLFMys454SNXDI3dWd8/R\njx3zr+M9Lfxz9nayCznizebcKjNI20rec1ccbCA3XUM/kg/T0ZCndsQoSAp2NzEN\n9OL+HUnWRcEk/FsGukIys4djPjxTLf/UFe9H1Q0c9QKBgQDINswWivP8pUTy1jSs\nSHVIqoon+H2xNB8KhwH6ckKlgASVehI3MVydjK8Ls7MuepX+ll3eE8dxinoLC+px\nQk8dJ0+4Gnh6zXKcizhaTRIvfo3PgAV5N4ReRlgvg3QdCG43Q7cvNvx3UZBsnn9m\nULblUWhO2XO5pw1M0NknasD6zQKBgQC4JxZI/i10BK8YPD9Bhi80VD3ddGTxBQwD\nzAKmDOcMS1tXT0ugM5S6M44XhReTuUmX4gDCKEBfJwdAuXCXAOYFuuPlx46guwzq\n509n5mELYvRZ4O3YRcw29NaE1Yr/yZom8YxkGgisOlPZH5Nu9EcIo9EFgsUsbYce\nAijBxyMA/QKBgEp6L+M231odNI/M5R0tewuD/Q6vXjpb9CwbWr4KYQZln87m8P29\nDAHDgp4sw7vHeCKTVum0m919sLaJQTXOf9WNeRc4KZcs87SOCXF1+AzY2/HTYrXb\n1A6pxkYudTQTncRLGUqj/rh4C+yL7UJnRhH5/X5PX8AxBz6K9iy2hoEFAoGAVpFJ\nUJbsFxX8mY/4zHyfxCG101zb9tFAjKhitlxqYMUr8yc7jduxlraVnUjbhH4dsmBz\nqtHxMMnQBwUlgFbTyu3IJERjL/u+Xs7N7THHfOrPo1CxfnGRRmRiU59u8D99T8FN\nFeGHIi9pKzBExmve2JjpsYV/2xrB4cFyF2XddqECgYBu2WeIDf97q+bjfHV75kDg\nRDQpjj3TJSv7fh3z9NOmlNEcQjwIobL1bpGakbnPm0O5EoKc82q6+TCY6fczlfI8\nhEH/4W7aXFXtUyTgAj72C7dogml49NGNEq1Yog/W8rHLKi6V/gNqj/IUY7dlKysK\nipOi7FA1NIbECK26y4wNQw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "johncban@pc-parts-inventory-catalog.iam.gserviceaccount.com",
+  "client_id": "114315257919151183827",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/johncban%40pc-parts-inventory-catalog.iam.gserviceaccount.com"
+}

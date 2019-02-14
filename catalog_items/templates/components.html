@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+
+<head>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/johncban/Udacity/fsnd-prjfour/Fullstack/ProjectFour/item_catalog/vagrant/catalog/static/img/icon/glyphicons-260-barcode.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel=stylesheet type=text/css href="{{url_for('static', filename='css/main.css')}}">
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+        crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+    <!-- Google MD Icons -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css"
+        integrity="sha384-y3tfxAZXuh4HwSYylfB+J125MxIs6mR5FOHamPBG064zB+AFeWH94NdvaCBm8qnd" crossorigin="anonymous">
+
+
+    <title>
+        PC Components Catalog
+    </title>
+    <!-- the below three lines are a fix to get HTML5 semantic elements working in old versions of Internet Explorer-->
+    <!--[if lt IE 9]>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+<![endif]-->
+</head>
+{% block body %}
+
+<body>
+    <header>
+        {% include "header.html" %}
+    </header>
+    <div class="row-fluid no-gutter hidden-xs">
+        <div class="col-sm-3 fade-in one">
+            <img src="https://cdn.rawgit.com/johncban/Udacity/fsnd-prjfour/Fullstack/ProjectFour/item_catalog/vagrant/catalog/static/img/cpu.png"
+                class="img-responsive">
+        </div>
+        <div class="col-sm-3 fade-in two">
+            <img src="https://cdn.rawgit.com/johncban/Udacity/fsnd-prjfour/Fullstack/ProjectFour/item_catalog/vagrant/catalog/static/img/ram.png"
+                class="img-responsive">
+        </div>
+        <div class="col-sm-3 fade-in three">
+            <img src="https://cdn.rawgit.com/johncban/Udacity/fsnd-prjfour/Fullstack/ProjectFour/item_catalog/vagrant/catalog/static/img/hd.png"
+                class="img-responsive">
+        </div>
+        <div class="col-sm-3 fade-in four">
+            <img src="https://cdn.rawgit.com/johncban/Udacity/fsnd-prjfour/Fullstack/ProjectFour/item_catalog/vagrant/catalog/static/img/mb.png"
+                class="img-responsive">
+        </div>
+    </div>
+
+    <div class="h-one">
+        Inventory Catalog
+    </div>
+
+    <section class="container-fluid wrapper">
+        <!-- Tabs -->
+        <div class="btn-pref btn-group btn-group-justified btn-group-lg" role="group" aria-label="...">
+            <div class="btn-group" role="group">
+                <button type="button" class="button-tab sharp" href="#tab1" data-toggle="tab"><span class="material-icons"
+                        aria-hidden="true">brightness_1</span>
+                    <div>Components</div>
+                </button>
+            </div>
+            <div class="btn-group" role="group">
+                <button type="button" class="button-tab sharp" href="#tab2" data-toggle="tab"><span class="material-icons"
+                        aria-hidden="true">blur_on</span>
+                    <div>Parts</div>
+                </button>
+            </div>
+        </div>
+
+        <div class="well sharp">
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="tab1">
+                    {% for pccomponents in pc_components %}
+
+                    <div class="container cont-center">
+                        <div class="row">
+                            <div class="col-md">
+                                <div class="card card-shadow">
+                                    <img class="img-responsive center-block" src="data:image;base64,{{pccomponents.pic|b64d}}"
+                                        alt="Card image cap">
+                                    <div class="card-block">
+                                        <hr>
+                                        {% if 'username' in session %}
+                                        <a href="{{url_for('showParts', pccomponents_id = pccomponents.id)}}"
+                                            data-toggle="modal">
+                                            <div class="comp-text">
+                                                {{pccomponents.c_name}}
+                                            </div>
+                                        </a>
+                                        <section class="btn-group pull-right control-component-align">
+                                            <a href="{{url_for('deleteComponent',pccomponents_id = pccomponents.id)}}"
+                                                data-toggle="modal" data-target="#delete" type="button" class="btn btn-del sharp">
+                                                <span class="material-icons">
+                                                    delete_forever
+                                                </span>
+                                            </a>
+                                            <a href="{{url_for('editComponent', pccomponents_id = pccomponents.id, )}}"
+                                                data-toggle="modal" data-target="#edit" type="button" class="btn btn-edit sharp">
+                                                <span class="material-icons">
+                                                    edit
+                                                </span>
+                                            </a>
+                                        </section>
+                                        {% else %}
+                                        <a href="{{url_for('showParts', pccomponents_id = pccomponents.id)}}"
+                                            data-toggle="modal" data-target="#record">
+                                            <h3>
+                                                {{pccomponents.c_name}}
+                                            </h3>
+                                        </a>
+                                        <section class="btn-group pull-right control-component-align" style="display:none">
+                                            <a href="{{url_for('deleteComponent',pccomponents_id = pccomponents.id)}}"
+                                                data-toggle="modal" data-target="#delete" type="button" class="btn btn-danger sharp">
+                                                <span class="material-icons">
+                                                    delete_forever
+                                                </span>
+                                            </a>
+                                            <a href="{{url_for('editComponent', pccomponents_id = pccomponents.id, )}}"
+                                                data-toggle="modal" data-target="#edit" type="button" class="btn btn-info sharp">
+                                                <span class="material-icons">
+                                                    edit
+                                                </span>
+                                            </a>
+                                        </section>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+                </div>
+                <div class="tab-pane fade in" id="tab2">
+                    <div class="panel-body">
+                        <table class="table table-hover table-condensed part-table nimate-reveal animate-first">
+                            <thead>
+                                <tr>
+                                    <th>Parts Name</th>
+                                    <th>Components Name</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            {% for item in pc_parts %}
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        {{item.p_name}}
+                                    </td>
+                                    <td>
+                                        {{item.pccomponents.c_name}}
+                                    </td>
+                                    <td>
+                                        {% if 'username' in session%}
+                                        <span class="badge badge-primary badge-pill">
+                                            QTY: {{item.qty}}
+                                        </span> {% else %}
+                                        <span class="badge badge-primary badge-pill" style="display:none">
+                                            QTY: {{item.qty}}
+                                        </span> {% endif %}
+                                    </td>
+                                </tr>
+                            </tbody>
+                            {% endfor %}
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Start Record Modal -->
+        <div class="modal fade centered-modal modal-res" id="record" role="dialog" aria-labelledby="basicModal"
+            aria-hidden="true">
+            <div class="modal-dialog centered-modal">
+                <div class="modal-header mod-header">
+                    <h3 class="modal-title">Components</h3>
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                    <!--
+                            h4 class="modal-title" id="myModalLabel">Basic Modal</h4>
+                        -->
+                </div>
+                <div class="modal-content sharp">
+
+                </div>
+            </div>
+        </div>
+        <!-- Start Edit Modal -->
+        <div class="modal fade centered-modal" id="edit" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+            <div class="modal-dialog modal-ku centered-modal">
+                <div class="modal-header mod-header">
+                    <h3 class="modal-title">Edit Component</h3>
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                    <!--
+                                h4 class="modal-title" id="myModalLabel">Basic Modal</h4>
+                            -->
+                </div>
+                <div class="modal-content sharp">
+
+                </div>
+            </div>
+        </div>
+        <!-- Start Modal Delete -->
+        <div class="modal fade centered-modal" id="delete" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+            <div class="modal-dialog modal-ku centered-modal">
+                <div class="modal-header mod-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        &times;
+                    </button>
+                    <!--
+                        h4 class="modal-title" id="myModalLabel">Basic Modal</h4>
+                    -->
+                </div>
+                <div class="modal-content sharp">
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Footer -->
+    <footer class="navbar-fixed-bottom">
+        <nav class="navbar-wrapper navbar-inverse sharp">
+            <div class="container-fluid">
+                <p class="navbar-text pull-left">&copy; 2018 by JCAB. All rights reserved.</p>
+            </div>
+            {% if 'username' in session%}
+            <!-- Add Component Button -->
+            <div id="btn-addcomp">
+                <a href="{{url_for('newComponent')}}">
+                    <button class="button-circle btn-shadow-add material-icons">library_add</button>
+                </a>
+            </div>
+            {% else %}
+            <div id="btn-addcomp" style="display:none">
+            </div>
+            {% endif %}
+            <!-- Below to Top Page Button -->
+            <div id="back-top">
+                <button class="button-circle btn-shadow-in semi-alphabtn material-icons">vertical_align_top</button>
+            </div>
+
+    </footer>
+    <!-- Script -->
+    <script>
+        // Bootstrap 3.7 Tooltip 
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
+</body>
+{% endblock %}

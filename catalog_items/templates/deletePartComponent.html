@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel=stylesheet type=text/css href="{{url_for('static', filename='css/main.css')}}">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+        crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="jumbotron-fluid jumbotron-shadow">
+            <div class="panel-heading">
+                <div class="jumbotron sharp">
+                    <h3>
+                            <h3> Are you sure you want to Delete <b class="del-header">{{item.p_name}}</b>? </h3>
+                    </h3>
+                </div>
+            </div>
+            <form action="{{ url_for('deletePartItem', pccomponents_id = item.pccomponents_id, part_id = item.id)}}" method='post'>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <div class="btn-group form-group" role="group" aria-label="Basic example">
+                                <input class='btn btn-danger sharp' type='submit' value='Delete'>
+                                <input class="btn btn-info sharp" type="button" value="Cancel" onclick="location.href = '{{url_for('showComponents')}}';">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+        </div>
+    </div>
+
+</body>
+
+</html>

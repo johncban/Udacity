@@ -1,0 +1,27 @@
+/* @media queries */
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+    .comp-text {
+        font-size: 80%;
+        font-weight: 400;
+        margin: 0%;
+    }
+}
+
+
+/* Smartphones (landscape) ----------- */
+@media only screen and (min-width : 321px) {
+    .comp-text {
+        font-size: 90%;
+        margin: 0%;
+    }
+}
+
+/* Smartphones (portrait) ----------- */
+@media only screen and (max-width : 320px) {
+    .comp-text {
+        font-size: 90%;
+        margin: 0%;
+    }
+}

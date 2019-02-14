@@ -1,0 +1,88 @@
+/** Flash Message -- BEGIN **/
+.flash-msg {
+  padding: 15px;
+  background-color: rgb(192, 192, 192, 0.2);
+  border-left: 6px solid #7f7f84;
+  margin-bottom: 10px;
+  -webkit-box-shadow: 0 5px 8px -6px rgba(0, 0, 0, .2);
+  -moz-box-shadow: 0 5px 8px -6px rgba(0, 0, 0, .2);
+  box-shadow: 0 5px 8px -6px rgba(0, 0, 0, .2);
+}
+
+.flash-msg-welcome-lg {
+  color: #FDB714;
+  padding: 35px;
+  font-size: large;
+  border-color: #FDB714;
+}
+
+.flash-msg-sec-lg {
+  color: rgb(104, 104, 109);
+  padding: 35px;
+  font-size: large;
+}
+
+.flash-msg-info {
+  color: rgb(90, 194, 6);
+  border-color: rgb(90, 194, 6);
+}
+
+.flash-msg-info>strong {
+  color: rgb(10, 148, 40);
+}
+
+.flash-msg-update {
+  color: rgb(6, 72, 194);
+  border-color: rgb(6, 72, 194);
+}
+
+.flash-msg-update>strong {
+  color: rgb(10, 31, 148);
+}
+
+.flash-msg-compdel {
+  border-color: #f9a825;
+  color: #f9a825;
+}
+
+.flash-msg-compdel>strong {
+  color: #f57f17;
+}
+
+.flash-msg-partnew {
+  border-color: #607d8b;
+  color: #607d8b;
+}
+
+.flash-msg-partnew>strong {
+  color: #37474f;
+}
+
+.flash-msg-partedit {
+  border-color: #ef6c00;
+  color: #ef6c00;
+}
+
+.flash-msg-partedit>strong {
+  color: #e65100;
+}
+
+.flash-msg-auth {
+  border-color: #00695c;
+  color: #00695c;
+}
+
+.flash-msg-auth>strong {
+  color: #004d40;
+}
+
+.flash-msg-partdel {
+  border-color: #f44336;
+  color: #f44336;
+}
+
+.flash-msg-partdel>strong {
+  color: #b71c1c;
+}
+
+/** Flash Message -- END **/

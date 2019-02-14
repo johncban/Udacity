@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+
+<head>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/johncban/Udacity/fsnd-prjfour/Fullstack/ProjectFour/item_catalog/vagrant/catalog/static/img/icon/glyphicons-260-barcode.png">
+    <!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+    </script>
+    <script src="//apis.google.com/js/platform.js?onload=start">
+    </script>
+    <!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+    <link rel=stylesheet type=text/css href="{{url_for('static', filename='css/main.css')}}">
+    <link rel=stylesheet type=text/css href="{{url_for('static', filename='css/login.css')}}">
+    <!--
+    <link rel=stylesheet type=text/css href="{{url_for('static', filename='bootstrap337/css/bootstrap.css')}}">
+    -->
+
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+        crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+
+
+    <title>
+        PC Component Catalog Login
+    </title>
+    <!-- the below three lines are a fix to get HTML5 semantic elements working in old versions of Internet Explorer-->
+    <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+    <header>
+        <nav>
+            {% include "header.html" %}
+        </nav>
+    </header>
+    <div class="video-background">
+        <div class="video-foreground">
+            <iframe src="https://www.youtube.com/embed/mF06orSM7zY?rel=0&amp;controls=0&amp;showinfo=0&rel=0&autoplay=1&loop=1"
+                frameborder="0" allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+    <div id="vidtop-content">
+        <div class="jumbotron position background">
+            <div class="container">
+                <h1>PC Catalog Inventory</h1>
+                <p>
+                    Inventory Database PC Parts Catalog, in fulfillment for Udacity's FSND Project.
+                </p>
+                <div id="signinButton">
+                    <span class="g-signin" data-scope="openid email" data-clientid="968950719619-sgml7mindkbptu6ppht6igqr6rf0o65f.apps.googleusercontent.com"
+                        data-redirecturi="postmessage" data-accesstype="offline" data-cookiepolicy="single_host_origin"
+                        data-callback="signInCallback" data-approvalprompt="force">
+                    </span>
+                </div>
+                <div id="result"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        function signInCallback(authResult) {
+            if (authResult['code']) {
+
+                // Hide the sign-in button now that the user is authorized
+                $('#signinButton').attr('style', 'display: none');
+
+                // Send the one-time-use code to the server, if the server responds, write a 'login successful' message to the web page and then redirect back to the main restaurants page
+                $.ajax({
+                    type: 'POST',
+                    url: '/gconnect?state={{STATE}}',
+                    processData: false,
+                    data: authResult['code'],
+                    contentType: 'application/octet-stream; charset=utf-8',
+                    success: function (result) {
+                        // Handle or verify the server response if necessary.
+                        if (result) {
+                            $('#result').html('Login Successful!</br>' + result + '</br>Redirecting...')
+                            setTimeout(function () {
+                                window.location.href = "/components";
+                            }, 4000);
+                        } else if (authResult['error']) {
+
+                            console.log('There was an error: ' + authResult['error']);
+                        } else {
+                            $('#result').html(
+                                'Failed to make a server-side call. Check your configuration and console.'
+                            );
+                        }
+                    }
+                });
+            }
+        }
+    </script>
+    <!--END GOOGLE PLUS SIGN IN -->
+</body>
+
+</html>

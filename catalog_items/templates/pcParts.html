@@ -1,0 +1,244 @@
+<html>
+
+<head>
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/johncban/Udacity/fsnd-prjfour/Fullstack/ProjectFour/item_catalog/vagrant/catalog/static/img/icon/glyphicons-260-barcode.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel=stylesheet type=text/css href="{{url_for('static', filename='css/main.css')}}">
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+        crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+
+
+
+    <title>
+        PC Part Item Record
+    </title>
+</head>
+{% block body %}
+
+<body>
+    <header>
+        {% if 'username' in session %}
+        <nav>
+            {% include "header.html" %}
+        </nav>
+        {% endif %}
+    </header>
+    {% if 'username' in session %}
+    <div class="container fade-in two">
+        <div class="card card-shadow">
+            <div class="prt-header sharp">
+                <h3>
+                    {{pc_components.c_name}}
+                </h3>
+                <hr>
+                {% if 'username' in session %}
+
+                <div id="btn-addpart">
+                    <a href="{{ url_for('newPartItem', pccomponents_id=pc_components.id) }}">
+                        <button class="button-circle btn-shadow-add material-icons">playlist_add</button>
+                    </a>
+                </div>
+
+                {% else %}
+
+                <div id="btn-addpart" style="display:none">
+                    
+                </div>
+
+                {% endif %}
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Part Name</th>
+                            <th>Part Image</th>
+                            <th>Part Description</th>
+                            <th>Unit Cost</th>
+                            <th>Unit Quantity</th>
+                            {% if 'username' in session %}
+                            <th></th>
+                            {% else %}
+                            <th style="display:none!important"></th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    {% for i in pc_parts %}
+                    <tbody>
+                        <tr>
+                            <td>
+                                {{i.p_name}}
+                            </td>
+                            <td>
+                                <img class="img-prt" src="data:image;base64,{{i.picpart|b64d}}" alt="Card image cap">
+                            </td>
+                            <td>
+                                {{i.description}}
+                            </td>
+                            <td>
+                                {{i.cost}}
+                            </td>
+                            <td>
+                                {{i.qty}}
+                            </td>
+                            {% if 'username' in session %}
+                            <td>
+                                <a href="{{url_for('deletePartItem', pccomponents_id=i.pccomponents_id, part_id = i.id)}}"
+                                    data-toggle="modal" data-target="#my-modal">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                                <span class="spa-margin">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </span>
+                                <a href="{{url_for('editPartItem', pccomponents_id=i.pccomponents_id, part_id = i.id)}}"
+                                    class="glp_alignment">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </a>
+                            </td>
+                            {% else %}
+                            <td style="display:none!important">
+                                <!--
+                                <a href="{{url_for('deletePartItem', pccomponents_id=i.pccomponents_id, part_id = i.id)}}"
+                                    data-toggle="modal" data-target="#my-modal">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                                <span class="spa-margin">
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                </span>
+                                <a href="{{url_for('editPartItem', pccomponents_id=i.pccomponents_id, part_id = i.id)}}"
+                                    class="glp_alignment">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </a>
+                                -->
+                            </td>
+                            {% endif %}
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="container">
+        <div class="panel-heading">
+            <h1>
+                {{pc_components.c_name}}
+                {% if 'username' in session %}
+                <a href="{{ url_for('newPartItem', pccomponents_id=pc_components.id) }}" class="btn btn-default btn-md navbar-btn"
+                    role="button">
+                    <span class="glyphicon glyphicon-floppy-disk"></span>
+                </a>
+                {% else %}
+                <a href="{{ url_for('newPartItem', pccomponents_id=pc_components.id) }}" class="btn btn-default btn-md navbar-btn"
+                    role="button" style="display:none!important">
+                    <!--
+                    <span class="glyphicon glyphicon-floppy-disk" style="display:none"></span>
+                    -->
+                </a>
+                {% endif %}
+            </h1>
+            <hr>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Part Name</th>
+                            <th>Part Image</th>
+                            <th>Part Description</th>
+                            <th>Unit Cost</th>
+                            <th>Unit Quantity</th>
+                            {% if 'username' in session %}
+                            <th></th>
+                            {% else %}
+                            <th style="display:none!important"></th>
+                            {% endif %}
+                        </tr>
+                    </thead>
+                    {% for i in pc_parts %}
+                    <tbody>
+                        <tr>
+                            <td>
+                                {{i.p_name}}
+                            </td>
+                            <td>
+                                <img class="img-prt" src="data:image;base64,{{i.picpart|b64d}}" alt="Card image cap">
+                            </td>
+                            <td>
+                                {{i.description}}
+                            </td>
+                            <td>
+                                {{i.cost}}
+                            </td>
+                            <td>
+                                {{i.qty}}
+                            </td>
+                            {% if 'username' in session %}
+                            <td>
+                                <a href="{{url_for('deletePartItem', pccomponents_id=i.pccomponents_id, part_id = i.id)}}"
+                                    data-toggle="modal" data-target="#my-modal">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="{{url_for('editPartItem', pccomponents_id=i.pccomponents_id, part_id = i.id)}}"
+                                    class="glp_alignment">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </a>
+                            </td>
+                            {% else %}
+                            <td style="display:none!important">
+                                <!--
+                                <a href="{{url_for('deletePartItem', pccomponents_id=i.pccomponents_id, part_id = i.id)}}"
+                                    data-toggle="modal" data-target="#my-modal">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <a href="{{url_for('editPartItem', pccomponents_id=i.pccomponents_id, part_id = i.id)}}"
+                                    class="glp_alignment">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </a>
+                                -->
+                            </td>
+                            {% endif %}
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <!-- Start Modal -->
+    <div class="modal fade centered-modal" id="my-modal" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
+        <div class="modal-dialog modal-ku centered-modal">
+            <div class="modal-header mod-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                </button>
+                <h1 class="modal-title sharp">
+                    Delete Part Item
+                </h1>
+            </div>
+            <div class="modal-content sharp">
+
+            </div>
+        </div>
+    </div>
+    <!-- End Modal -->
+</body>
+{% endblock %}
+
+</html>
