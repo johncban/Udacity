@@ -56,7 +56,7 @@ sudo timedatectl set-timezone UTC
 ```
 As the timezone is updated it will require the Lightsail's Ubuntu OS to be updated and upgraded its libraries as follows.
 ```
-sudo apt-get update && sudo apt-get upgrade
+sudo apt-get update && sudo apt-get upgrade && sudo apt-get dist-upgrade
 ```
 
 ####
@@ -174,34 +174,30 @@ In Lightsail's case its different but workable with UFW.
 
 To adjust the UFW firewall policy enter the following commands.
 ```
-grader@<PUBLIC IP>:~$ sudo ufw default deny incoming
-Default incoming policy changed to 'deny'
-(be sure to update your rules accordingly)
-grader@<PUBLIC IP>:~$ sudo ufw default deny outgoing
-Default outgoing policy changed to 'deny'
-(be sure to update your rules accordingly)
-grader@<PUBLIC IP>:~$ sudo ufw allow ntp
-Rules updated
-Rules updated (v6)
-grader@<PUBLIC IP>:~$ sudo ufw allow ssh
-Rules updated
-Rules updated (v6)
-grader@<PUBLIC IP>:~$ sudo ufw allow 2200/tcp
-Rules updated
-Rules updated (v6)
-grader@<PUBLIC IP>:~$ sudo ufw allow 80/tcp
-Rules updated
-Rules updated (v6)
-grader@<PUBLIC IP>:~$ sudo ufw allow http
-Skipping adding existing rule
-Skipping adding existing rule (v6)
-grader@<PUBLIC IP>:~$ sudo ufw enable #To enable the firewall
+sudo ufw default deny incoming
+sudo ufw default deny outgoing
+sudo ufw allow ntp
+sudo ufw allow http
+sudo ufw allow 2200/tcp
 ```
+
 To monitor ufw status, enter the following command
 ```
 $ sudo ufw status
 ```
+```
+grader@PUBLIC-IP:/etc/apache2/sites-available$ sudo ufw status
+Status: active
 
+To                         Action      From
+--                         ------      ----
+2200/tcp                   ALLOW       Anywhere                  
+80/tcp                     ALLOW       Anywhere                  
+123                        ALLOW       Anywhere                  
+2200/tcp (v6)              ALLOW       Anywhere (v6)             
+80/tcp (v6)                ALLOW       Anywhere (v6)             
+123 (v6)                   ALLOW       Anywhere (v6)
+```
 ## Software Installation
 
 The following software will be installed to support Python, Flask and Apache.
@@ -217,10 +213,10 @@ To install WSGI
 ```
 sudo apt-get install libapache2-mod-wsgi python-dev
 ```
-To install apache
+To install apache and enable WSGI
 ```
 sudo apt-get install apache2
-sudo systemctl restart apache2 
+sudo a2enmod wsgi
 ```
 To install Github
 ```
@@ -480,6 +476,8 @@ sudo tail −f /var/log/apache2/error.log
 * https://mudspringhiker.github.io/deploying-a-flask-web-app-on-lightsail-aws.html
 
 * https://www.digitalocean.com/community/tutorials/how-to-setup-a-firewall-with-ufw-on-an-ubuntu-and-debian-cloud-server
+
+* https://stackoverflow.com/questions/20627327/invalid-command-wsgiscriptalias-perhaps-misspelled-or-defined-by-a-module-not
 
 * https://medium.com/@JoshuaTheMiller/creating-a-simple-website-with-a-custom-domain-on-amazon-lightsail-docker-86600f19273
 
